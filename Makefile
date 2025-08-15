@@ -128,3 +128,30 @@ env-info: ## Show environment information
 
 update-deps: ## Update dependencies
 	$(UV) lock --upgrade
+
+# Docker commands
+docker-build: ## Build production Docker image
+	docker build -f deploy/Dockerfile -t python-uv-template:latest .
+
+docker-build-dev: ## Build development Docker image
+	docker build -f deploy/Dockerfile.dev -t python-uv-template:dev .
+
+docker-run: ## Run production container
+	docker run --rm -p 8000:8000 python-uv-template:latest
+
+docker-run-dev: ## Run development container
+	docker run --rm -it -p 8000:8000 -v $(PWD)/src:/app/src python-uv-template:dev
+
+docker-compose-up: ## Start production environment with docker-compose
+	docker-compose -f deploy/docker-compose.yml up --build
+
+docker-compose-dev: ## Start development environment with docker-compose
+	docker-compose -f deploy/docker-compose.dev.yml up --build
+
+docker-compose-down: ## Stop docker-compose services
+	docker-compose -f deploy/docker-compose.yml down
+	docker-compose -f deploy/docker-compose.dev.yml down
+
+docker-clean: ## Clean Docker images and containers
+	docker system prune -f
+	docker image prune -f

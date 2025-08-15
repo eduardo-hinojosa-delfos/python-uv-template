@@ -270,30 +270,33 @@ def client(app):
 ## 🚀 Deployment Considerations
 
 ### Docker Support
-Add `Dockerfile`:
-```dockerfile
-FROM python:3.13-slim
+The template includes comprehensive Docker support in the `deploy/` directory:
 
-WORKDIR /app
+#### Quick Docker Setup
+```bash
+# Development environment
+make docker-compose-dev
 
-# Install uv
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+# Production environment
+make docker-compose-up
 
-# Copy dependency files
-COPY pyproject.toml uv.lock ./
-
-# Install dependencies
-RUN uv sync --frozen --no-dev
-
-# Copy source code
-COPY src/ src/
-
-# Set Python path
-ENV PYTHONPATH=/app/src
-
-# Run application
-CMD ["uv", "run", "python", "-m", "your_project_name.main"]
+# Build custom image
+make docker-build
 ```
+
+#### Customize Docker Configuration
+1. **Update container names** in `deploy/docker-compose.yml`
+2. **Modify environment variables** for your application
+3. **Add additional services** (databases, Redis, etc.)
+4. **Configure volume mounts** for data persistence
+
+#### Docker Files Included
+- `Dockerfile` - Production multi-stage build
+- `Dockerfile.dev` - Development with hot reload
+- `docker-compose.yml` - Production deployment
+- `docker-compose.dev.yml` - Development environment
+- `.dockerignore` - Optimized build context
+- `docker-entrypoint.sh` - Custom entrypoint script
 
 ### Environment Variables
 Create `.env.example`:

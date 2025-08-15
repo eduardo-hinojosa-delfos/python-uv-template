@@ -90,6 +90,17 @@ make env-info      # Show environment information
 make update-deps   # Update dependencies
 ```
 
+### Docker
+```bash
+make docker-build      # Build production Docker image
+make docker-build-dev  # Build development Docker image
+make docker-run        # Run production container
+make docker-run-dev    # Run development container
+make docker-compose-up # Start with docker-compose
+make docker-compose-dev # Start development environment
+make docker-clean      # Clean Docker resources
+```
+
 ## 🔧 Configured Tools
 
 ### Ruff
@@ -137,6 +148,11 @@ make update-deps   # Update dependencies
 ```
 .
 ├── .github/workflows/     # GitHub Actions CI/CD
+├── deploy/               # Docker deployment files
+│   ├── Dockerfile        # Production Docker image
+│   ├── Dockerfile.dev    # Development Docker image
+│   ├── docker-compose.yml # Production deployment
+│   └── docker-compose.dev.yml # Development environment
 ├── src/python_uv_template/  # Source code (rename to your project)
 ├── tests/                 # Test files
 ├── .pre-commit-config.yaml # Pre-commit configuration
@@ -200,5 +216,6 @@ make env-info
 - **Quality First**: All major code quality tools pre-configured
 - **Security Focused**: Built-in security scanning and dependency auditing
 - **CI/CD Ready**: GitHub Actions workflow included
+- **Docker Ready**: Production and development Docker configurations
 - **Developer Friendly**: Comprehensive Makefile for common tasks
 - **Best Practices**: Follows Python packaging and development best practices

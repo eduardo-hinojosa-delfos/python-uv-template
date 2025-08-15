@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    container_name: python-uv-template
+    restart: unless-stopped
+    environment:
+      - PYTHONPATH=/app/src
+      - ENVIRONMENT=production
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount logs directory (optional)
+      - ./logs:/app/logs
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add database service
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: python-uv-template-db
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_DB: app_db
+  #     POSTGRES_USER: app_user
+  #     POSTGRES_PASSWORD: app_password
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - app-network
+
+  # Optional: Add Redis service
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: python-uv-template-redis
+  #   restart: unless-stopped
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  # postgres_data:
+  logs:

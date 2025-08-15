@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  app-dev:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.dev
+    container_name: python-uv-template-dev
+    restart: unless-stopped
+    environment:
+      - PYTHONPATH=/app/src
+      - ENVIRONMENT=development
+      - DEBUG=true
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount source code for hot reload
+      - ../src:/app/src
+      - ../tests:/app/tests
+      - ../pyproject.toml:/app/pyproject.toml
+      - ../uv.lock:/app/uv.lock
+      # Mount git for pre-commit hooks
+      - ../.git:/app/.git
+    networks:
+      - dev-network
+    stdin_open: true
+    tty: true
+    command: >
+      sh -c "
+        echo 'Starting development environment...' &&
+        uv run python -m python_uv_template.main
+      "
+
+  # Development database
+  postgres-dev:
+    image: postgres:15-alpine
+    container_name: python-uv-template-db-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: app_db_dev
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: dev_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    networks:
+      - dev-network
+
+  # Development Redis
+  redis-dev:
+    image: redis:7-alpine
+    container_name: python-uv-template-redis-dev
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    driver: bridge
+
+volumes:
+  postgres_dev_data:

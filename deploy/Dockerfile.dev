@@ -1,0 +1,38 @@
+# Development Dockerfile for Python UV Template
+FROM python:3.13-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    UV_CACHE_DIR=/tmp/uv-cache
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+
+# Create app directory
+WORKDIR /app
+
+# Copy source code first for development
+COPY . .
+
+# Install all dependencies (including dev)
+RUN uv sync --frozen
+
+# Set Python path
+ENV PYTHONPATH="/app/src"
+
+# Install pre-commit hooks
+RUN uv run pre-commit install
+
+# Expose port for development server
+EXPOSE 8000
+
+# Default command for development
+CMD ["uv", "run", "python", "-m", "python_uv_template.main"]
