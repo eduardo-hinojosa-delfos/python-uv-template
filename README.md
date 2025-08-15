@@ -118,7 +118,7 @@ make update-deps   # Update dependencies
 - Customizable security rules
 
 ### Safety
-- Dependency vulnerability auditing
+- Modern dependency vulnerability auditing with `scan` command
 - Known security vulnerability detection
 - Regular security database updates
 

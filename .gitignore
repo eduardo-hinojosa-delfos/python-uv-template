@@ -52,3 +52,6 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+
+# Development/verification files (not part of template)
+VERIFICATION_REPORT.md

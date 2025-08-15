@@ -65,7 +65,7 @@ security: ## Run security analysis with bandit
 	$(UV) run bandit -r $(SRC_DIR)
 
 audit: ## Audit dependencies with safety
-	$(UV) run safety check --ignore-unpinned-requirements
+	$(UV) run safety scan
 
 # Pre-commit
 pre-commit: ## Run pre-commit on all files
