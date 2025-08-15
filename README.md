@@ -66,7 +66,8 @@ make type-check      # Type checking with mypy
 ### Security
 ```bash
 make security        # Security analysis with bandit
-make audit          # Audit dependencies with safety
+make audit          # Audit dependencies with safety (requires login)
+make audit-ci       # Audit dependencies for CI (using pip-audit)
 ```
 
 ### Pre-commit
