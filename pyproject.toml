@@ -18,7 +18,10 @@ classifiers = [
     "Topic :: Software Development :: Quality Assurance",
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "pymupdf>=1.23.0",
+    "pathlib>=1.0.1",
+]
 
 [project.scripts]
 main = "python_uv_template.main:main"
