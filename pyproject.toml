@@ -17,12 +17,9 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: Quality Assurance",
 ]
-requires-python = ">=3.13"
+requires-python = ">=3.10,<3.13"
 dependencies = [
     "pymupdf>=1.23.0",
-<<<<<<< HEAD
-    "pathlib>=1.0.1",
-=======
     # LangChain core + community splitters/loaders/vectorstores
     "langchain>=0.2.0",
     "langchain-core>=0.2.0",
@@ -51,18 +48,15 @@ dependencies = [
     "llama-index-embeddings-huggingface>=0.2.0",
     "chromadb>=1.1.1",
     "python-dotenv>=1.1.1",
->>>>>>> 5fa6284 (Separar ingest_index y qa_pipeline con vector_db persistente)
+    "Deprecated>=1.2.14",
 ]
 
 [project.scripts]
 main = "python_uv_template.main:main"
-<<<<<<< HEAD
-=======
 main_langchain = "python_uv_template.main_langchain:main"
 ingest_index = "python_uv_template.ingest_index:main"
 qa_pipeline = "python_uv_template.qa_pipeline:main"
 
->>>>>>> 5fa6284 (Separar ingest_index y qa_pipeline con vector_db persistente)
 
 [dependency-groups]
 dev = [
@@ -87,6 +81,10 @@ build-backend = "hatchling.build"
 [tool.ruff]
 target-version = "py313"
 line-length = 88
+
+[tool.uv]
+index-url = "https://pypi.org/simple"
+
 
 [tool.ruff.lint]
 select = [
