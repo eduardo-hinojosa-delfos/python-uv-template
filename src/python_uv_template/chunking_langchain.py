@@ -15,12 +15,16 @@ Parámetros clave:
 """
 
 import re
+import unicodedata
+from typing import Dict
+
 from pathlib import Path
 from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional
 
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_core.messages import HumanMessage
 
 # Si tienes disponible tu normalizador, perfecto; si no, se hace fallback grácil.
 try:
@@ -45,6 +49,7 @@ class LegalChunkerLC:
         chunk_size: int = 1000,
         chunk_overlap: int = 150,
         section_subchunking: str = "none",  # "none" (equivalente a tu LlamaIndex actual) o "recursive"
+        llm=None,
     ):
         self.section_patterns = {
             "VISTO": r"VISTO\s*:?",
@@ -58,6 +63,7 @@ class LegalChunkerLC:
             chunk_overlap=chunk_overlap,
             separators=["\n\n", "\n", ". ", ".", " "],
         )
+        self.llm = llm
 
     # ---------- Limpiezas ----------
     def _strip_trailing_footer(self, text: str) -> str:
@@ -130,11 +136,112 @@ class LegalChunkerLC:
 
         return "\n\n".join([p for p in merged if p != ""]) if merged else t
 
-    # ---------- Extracción de metadatos de documento ----------
+    def _normalize_for_metadata(self, s: str) -> str:
+        """
+        Normaliza texto para extracción de metadatos:
+        - NFKC para unificar variantes (e.g., '：' -> ':').
+        - Quita zero-width (u200B-u200D, FEFF).
+        - Convierte NBSP y espacios raros a ' '.
+        - Normaliza guiones largos a '-'.
+        - Normaliza saltos a '\n'.
+        """
+        if not s:
+            return s
+        # Unicode compatibility normalization
+        s = unicodedata.normalize("NFKC", s)
+
+        # Quitar zero-width chars (ZWSP, ZWNBSP/BOM)
+        s = re.sub(r"[\u200B-\u200D\uFEFF]", "", s)
+
+        # Reemplazar espacios no estándar por espacio normal
+        s = s.replace("\u00A0", " ").replace("\u2007", " ").replace("\u202F", " ")
+
+        # Normalizar guiones y dos puntos exóticos
+        s = s.replace("–", "-").replace("—", "-").replace("−", "-").replace("：", ":")
+
+        # Saltos consistentes
+        s = s.replace("\r\n", "\n").replace("\r", "\n")
+
+        # Compactar espacios redundantes cerca de separadores
+        s = re.sub(r"[ \t]+\n", "\n", s)       # quitar espacios antes de salto
+        s = re.sub(r"\n[ \t]+", "\n", s)       # quitar espacios después de salto
+        s = re.sub(r"[ \t]+:[ \t]+", ": ", s)  # "Materia :   X" -> "Materia: X"
+        return s
+
+    def _first_acuerda_item(self, text_norm: str) -> Optional[str]:
+        """
+        Devuelve el PRIMER ítem (línea) del listado que sigue a 'EL TRIBUNAL ACUERDA'.
+        Acepta bullets: -, •, *, '1)', '1.', 'I)' etc.
+        """
+        m = re.search(r"EL\s+TRIBUNAL\s+ACUERDA\s*:?", text_norm, re.IGNORECASE)
+        if not m:
+            return None
+
+        after = text_norm[m.end():]
+        lines = after.split("\n")
+
+        list_re = re.compile(r"^\s*(?:[-•*]\s+|\d+\)|\d+\.\s+|[IVXLCM]+\)\s+)", re.IGNORECASE)
+        for line in lines:
+            if not line.strip():
+                # permitir líneas en blanco iniciales
+                continue
+            if list_re.match(line):
+                return line.strip()
+            # Si aparece una línea con mucho texto no listada, no la tomamos.
+        return None
+
+    def _classify_status_with_llm(self, first_item: str) -> Optional[str]:
+        """
+        Usa el LLM inyectado para clasificar el primer ítem del 'ACUERDA'
+        en uno de: Mantiene | Observa | No formula | Levanta.
+        Devuelve None si no pudo decidir.
+        """
+        if not self.llm or not first_item:
+            return None
+
+        prompt = f"""
+Eres un clasificador estricto. Lee el siguiente enunciado que habla sobre el status de un expediente de jurisprudencia
+y devuelve SOLO una palabra EXACTA entre estas 4 (sin explicaciones, sin comillas, sin espacios extra):
+Mantiene | Observa | No formula | Levanta.
+
+Dame la palabra que mejor se adecúe para representar dicho enunciado.
+
+Enunciado:
+{first_item}
+
+Respuesta (una sola palabra de la lista):
+""".strip()
+
+        try:
+            resp = self.llm.invoke([HumanMessage(content=prompt)])
+            label = (resp.content or "").strip()
+            # Normaliza y valida respuesta
+            label_norm = label.lower()
+            mapping = {
+                "mantiene": "Mantiene",
+                "observa": "Observa",
+                "no formula": "No formula",
+                "noformula": "No formula",
+                "levanta": "Levanta",
+            }
+            # limpiar posibles comillas
+            label_norm = label_norm.strip('"').strip("'")
+            # quitar espacios dobles
+            label_norm = re.sub(r"\s+", " ", label_norm)
+
+            return mapping.get(label_norm, None)
+        except Exception:
+            return None
+
+
     def _extract_document_metadata(self, text: str) -> Dict[str, str]:
-        # Mantiene la lógica original para fecha, expediente y entrada
-        head = text[:3000]
-        tail = text[-3000:]  # <-- NUEVO: también analizamos los últimos 3000 caracteres
+        # ===== Normalización fuerte ANTES de todo =====
+        text_norm = self._normalize_for_metadata(text)
+
+        # Mantiene la lógica original para fecha, expediente, entrada (usando head normalizado)
+        head = text_norm[:3000]
+        # tail = text_norm[-3000:]  # ya no es necesario usar tail: buscaremos en todo
+
         date_normalized = normalize_date_es(head) or ""
 
         expediente = ""
@@ -173,25 +280,63 @@ class LegalChunkerLC:
         if not fecha_entrada:
             fecha_entrada = "N/A"
 
-        # --- NUEVO: Buscar MATERIA y STATUS al principio y al final ---
+        # ===== Extracción robusta de MATERIA y STATUS =====
         materia = "Sin información"
         status = "Sin información"
 
-        # Primero buscamos en todo el texto (por si están en medio)
-        # Priorizamos tail para capturar datos al final
-        search_area = tail + "\n" + head
-
-        m_materia = re.search(
-            r"\bMATERIA\s*[:\-]\s*(.+)", search_area, re.IGNORECASE
+        # 1) Preferencia: líneas individuales tipo "Materia: ..." / "Status: ..."
+        #    ^\s* para tolerar indentación; MULTILINE para anclar por líneas
+        line_materia = re.search(
+            r"(?im)^\s*Materia\s*[:\-]\s*(.+?)\s*$",
+            text_norm,
         )
-        if m_materia:
-            materia = m_materia.group(1).strip()
+        if line_materia:
+            val = line_materia.group(1).strip()
+            materia = val if val else "Sin información"
 
-        m_status = re.search(
-            r"\bSTATUS\s*[:\-]\s*(.+)", search_area, re.IGNORECASE
+        line_status = re.search(
+            r"(?im)^\s*Status\s*[:\-]\s*(.+?)\s*$",
+            text_norm,
         )
-        if m_status:
-            status = m_status.group(1).strip()
+        if line_status:
+            val = line_status.group(1).strip()
+            status = val if val else "Sin información"
+
+        # 2) Fallback: ambos en una sola línea (Materia: ... // Status: ...)
+        #    Solo si alguno no se encontró por la vía de líneas
+        if materia == "Sin información" or status == "Sin información":
+            # Delimitadores para cortar valores
+            _DELIMS = r"(?:\/\/|;|\||,|\n{2,}|$|\bStatus\b|\bMateria\b)"
+            materia_pat = re.compile(
+                rf"\bMateria\s*[:\-]?\s*(.+?)(?=\s*{_DELIMS})",
+                flags=re.IGNORECASE | re.DOTALL,
+            )
+            status_pat = re.compile(
+                rf"\bStatus\s*[:\-]?\s*(.+?)(?=\s*{_DELIMS})",
+                flags=re.IGNORECASE | re.DOTALL,
+            )
+
+            def _clean_value(v: str) -> str:
+                if v is None:
+                    return "Sin información"
+                v = v.strip()
+                # quitar separadores residuales al final
+                v = re.sub(r"\s*(?:\/\/|;|\||,)\s*$", "", v).strip()
+                # si solo quedan espacios/símbolos no alfanuméricos, considera vacío
+                if not re.search(r"[A-Za-zÁÉÍÓÚáéíóúÑñ0-9]", v):
+                    return "Sin información"
+                return v
+
+            if materia == "Sin información":
+                mm = materia_pat.search(text_norm)
+                if mm:
+                    materia = _clean_value(mm.group(1))
+
+            if status == "Sin información":
+                first_item = self._first_acuerda_item(text_norm)
+                inferred = self._classify_status_with_llm(first_item)
+                if inferred:
+                    status = inferred
 
         return {
             "date": date_normalized,
@@ -201,8 +346,6 @@ class LegalChunkerLC:
             "materia": materia,
             "status": status,
         }
-
-
     # ---------- Normalización de ATENTO / "EL TRIBUNAL ACUERDA" ----------
     def _process_atento_acuerda_block(self, section_text: str) -> str:
         m = re.search(r"EL\s+TRIBUNAL\s+ACUERDA\s*:?", section_text, re.IGNORECASE)
@@ -285,6 +428,8 @@ class LegalChunkerLC:
                         "expediente": doc_meta.get("expediente", ""),
                         "entrada": doc_meta.get("entrada", ""),
                         "fecha_entrada": doc_meta.get("fecha_entrada", ""),
+                        "materia": doc_meta.get("materia", "Sin información"),
+                        "status": doc_meta.get("status", "Sin información"),
                     }
                     documents.append(Document(page_content=d.page_content, metadata=md))
             else:
@@ -299,6 +444,8 @@ class LegalChunkerLC:
                     "expediente": doc_meta.get("expediente", ""),
                     "entrada": doc_meta.get("entrada", ""),
                     "fecha_entrada": doc_meta.get("fecha_entrada", ""),
+                    "materia": doc_meta.get("materia", "Sin información"),
+                    "status": doc_meta.get("status", "Sin información"),
                 }
                 documents.append(Document(page_content=section_text, metadata=md))
 

@@ -45,6 +45,13 @@ class PDFTextExtractor:
                 full_text_parts.append(text.strip())
 
         full_text = "\n".join(full_text_parts).strip()
+
+        full_text = re.sub(
+            r"(?i)(Materia\s*:\s*[^\n/]+)\s*//\s*(Status\s*:\s*[^\n]+)",
+            lambda m: f"{m.group(1).strip()}\n{m.group(2).strip()}",
+            full_text,
+        )
+        
         print(f"  → Extraído {len(full_text)} caracteres.")
 
         return {"file": pdf_path.name, "text": full_text, "chars": len(full_text)}

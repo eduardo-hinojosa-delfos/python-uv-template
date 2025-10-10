@@ -13,6 +13,7 @@ from python_uv_template.ingesta import process_pdfs
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain.chat_models import init_chat_model
 
 from python_uv_template.chunking_langchain import LegalChunkerLC
 from python_uv_template.vector_db import ChromaVectorDB
@@ -26,6 +27,8 @@ def main() -> None:
     # API key (para otros pasos del pipeline si la necesitas luego)
     if not os.environ.get("OPENAI_API_KEY"):
         os.environ["OPENAI_API_KEY"] = getpass.getpass("Enter API key for OpenAI: ")
+
+    llm = init_chat_model("gpt-4o-mini", model_provider="openai")
 
     # Embeddings (mantén el mismo modelo entre ingesta y QA)
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
@@ -43,7 +46,6 @@ def main() -> None:
     )
     
     
-    
     docs = loader.load()
     print(f"[Ingest] Archivos leídos: {len(docs)}")
 
@@ -52,6 +54,7 @@ def main() -> None:
         chunk_size=1000,
         chunk_overlap=150,
         section_subchunking="none",  # o "recursive"
+        llm=llm,
     )
 
     chunked_docs: List[Document] = []
@@ -75,7 +78,7 @@ def main() -> None:
     )
 
     # Limpia colección anterior si quieres reindexar desde cero:
-    # vdb.reset()
+    vdb.reset()
 
     vdb.index(chunked_docs)  # opcionalmente pasa IDs estables
     vdb.persist()

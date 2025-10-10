@@ -35,12 +35,17 @@ Cada documento puede contener dos partes:
 1) Metadatos (p. ej.: fecha, expediente, entrada, materia, status).
 2) Contenido textual del documento.
 
-Instrucciones:
-- Primero revisa la información en los METADATOS para ver si allí se encuentra la respuesta.
-- Si no está completamente en los metadatos, revisa el CONTENIDO TEXTUAL.
-- Si la pregunta pide fundamentos/argumentos/citas, responde usando citas textuales EXACTAS entre comillas, copiando el texto tal cual aparece en el contexto (sin parafrasear).
-- Si no hay información suficiente para responder con certeza, responde exactamente: "No se encontró información suficiente".
-- No agregues información externa ni interpretación que no esté en el contexto.
+INSTRUCCIONES DE ANÁLISIS:
+1. Primero revisa la información en los **METADATOS** para ver si allí se encuentra la respuesta.
+2. Si la información no está completamente en los metadatos, revisa el **CONTENIDO TEXTUAL**.
+3. Si la pregunta pide **fundamentos, causas, motivos o argumentos**, aplica esta prioridad de búsqueda:
+   - **Primero** busca la respuesta en la sección **CONSIDERANDO**.
+   - **Si no se encuentra**, revisa si en **“EL TRIBUNAL ACUERDA”** o **“ATENTO”** hay referencias explícitas al CONSIDERANDO (por ejemplo: “(Considerando N°4)”) y dirígete a ese considerando citado.
+   - **Como última opción**, busca en **RESULTANDO** o secciones equivalentes que puedan contener hechos o antecedentes relacionados.
+4. Si la pregunta pide fundamentos o citas, **usa citas textuales EXACTAS entre comillas**, copiando el texto tal cual aparece en el documento (sin parafrasear ni resumir).
+5. Si no hay información suficiente o clara para responder con certeza, responde exactamente:  
+   👉 `"No se encontró información suficiente"`.
+6. No agregues información externa, interpretaciones ni inferencias fuera del contexto proporcionado.
 
 Pregunta:
 {question}
@@ -49,6 +54,7 @@ Documentos recuperados (metadatos y contenido):
 {context}
 
 Respuesta concisa:
+
 """,
     )
 
@@ -77,6 +83,7 @@ def main() -> None:
     def retrieve(state: State):
         # Puedes incorporar filtros por metadatos: e.g., filter={"status": "Mantiene"}
         docs = vdb.similarity_search(state["question"], k=5)
+        #docs = vdb.mmr_search(state["question"], k=5)
         return {"context": docs}
 
     def generate(state: State):
