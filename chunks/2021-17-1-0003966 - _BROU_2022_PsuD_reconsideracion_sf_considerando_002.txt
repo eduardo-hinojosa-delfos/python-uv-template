@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\2021-17-1-0003966 - _BROU_2022_PsuD_reconsideracion_sf.txt
+Sección: CONSIDERANDO
+Chunk: 2
+Palabras: 67
+Caracteres: 454
+Fecha: 2022-02-03
+Expediente: 2021-17-1-
+Entrada: 4285/21
+Fecha entrada: N/A
+Materia: Reconsideración de Observaciones
+Status: Levantada
+
+=== CONTENIDO ===
+
+CONSIDERANDO: que son de recibo los argumentos expresados por el organismo en cuanto a que la actividad de recuperación, guarda un estrecho vínculo con la gestión integralmente considerada, de la que forma parte importante, representando la gestión del crédito, una actividad eminentemente propia del giro comercial del Instituto e ínsita en el giro de toda intermediación financiera, por lo que corresponde el levantamiento de la observación formulada;

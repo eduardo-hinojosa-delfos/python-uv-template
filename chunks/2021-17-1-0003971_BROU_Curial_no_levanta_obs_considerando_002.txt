@@ -1,0 +1,32 @@
+=== METADATOS ===
+Archivo: extracted_text\2021-17-1-0003971_BROU_Curial_no_levanta_obs.txt
+Sección: CONSIDERANDO
+Chunk: 2
+Palabras: 520
+Caracteres: 3276
+Fecha: 2022-03-29
+Expediente: 2021-17-1-
+Entrada: 1102/2022
+Fecha entrada: N/A
+Materia: Reconsideración de Observaciones
+Status: Mantiene
+
+=== CONTENIDO ===
+
+CONSIDERANDO: 1) que la contratación de referencia encuadra en el concepto legal de arrendamientos de servicios, ofrecidos al BROU por la profesional contratada en forma ininterrumpida por el plazo de tres años, cuya forma de pago se realiza de acuerdo a los recuperos efectivamente obtenidos;
+
+2) que el artículo 33 del TOCAF establece excepciones para las contrataciones que deben realizarse por principio, mediante procedimiento competitivo, entre las cuales se encuentra la dispuesta en el Numeral 4), Literal D) del citado artículo que prevé: “Cuando el bien o servicio integre de manera directa o indirecta la oferta comercial de una entidad pública, que actúe en régimen de competencia”;
+
+3) que de conformidad con lo establecido por el artículo 13 de la Ley N° 18.716, del 24/12/10, compete al BROU otorgar créditos y préstamos y, asimismo, la realización de toda clase de operaciones comerciales y/o financieras que constituyan transacciones bancarias usuales y que no se encuentren prohibidas por la Constitución de la República y por su Carta Orgánica. En ese sentido el BROU se encuentra en régimen de competencia con las demás entidades privadas habilitadas para realizar operaciones bancarias, considerando como tal, aquella oferta comercial que realiza el banco en las operaciones financieras que constituyan transacciones bancarias usuales;
+
+4) que la contratación de curiales por el régimen de arrendamientos de servicios, para la recuperación de los créditos otorgados en sus transacciones bancarias usuales, no puede ser interpretada como que integra de manera directa o indirecta la oferta comercial del Banco, no siendo de recibo una interpretación extensiva de la causal la que - por definición, al tratarse de una excepción - exige una aplicación estricta de la misma;
+
+5) que en ese sentido, la nueva redacción concedida al anterior numeral 22) del TOCAF, apuntó a delimitar el ámbito de aplicación de la excepción, a los bienes o servicios que integran la oferta comercial del organismo de manera directa o indirecta, por lo que no puede contratarse cualquier bien o servicio que requiera la organización por el sólo hecho de estar en competencia, sino que dichas habilitaciones excepcionales, quedarán acotadas a bienes o servicios que vayan a integrarse, aunque sea de forma indirecta, a la oferta comercial del organismo;
+
+6) que en aplicación de las reglas de interpretación previstas en el artículo 17 del Código Civil, cuando el sentido de la ley es claro, no se desatenderá su tenor literal, a pretexto de consultar su espíritu;
+
+7) que a mayor abundamiento el Ente reglamentó y empleaba un procedimiento competitivo aprobado por Resolución de Directorio de 21 de julio de 2005, para la contratación de este tipo de profesionales;
+
+8) que por lo expuesto, la recuperación de los créditos otorgados por el Banco, sea por medio de sus propios funcionarios profesionales, o a través de la contratación de abogados, no integra una oferta comercial, en el ámbito de una operación financiera, que se encuentre amparada en la excepción establecida en el TOCAF al respecto, no siendo alcanzada por la excepción invocada;
+
+9) que en el presente caso el BROU solicita la reconsideración de la anterior decisión de este Tribunal sin insistir en el gasto;

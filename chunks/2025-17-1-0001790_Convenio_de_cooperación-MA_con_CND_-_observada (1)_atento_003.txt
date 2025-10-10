@@ -1,0 +1,21 @@
+=== METADATOS ===
+Archivo: extracted_text\2025-17-1-0001790_Convenio_de_cooperación-MA_con_CND_-_observada (1).txt
+Sección: ATENTO
+Chunk: 3
+Palabras: 50
+Caracteres: 303
+Fecha: 2025-05-07
+Expediente: 2025-17-1-0001790.
+Entrada: 1724/2025
+Fecha entrada: N/A
+Materia: (literal “A”)
+Status: Observa
+
+=== CONTENIDO ===
+ATENTO: a lo expresado precedentemente y a lo dispuesto por el literal b)
+
+del artículo 211 de la Constitución de la República;
+
+EL TRIBUNAL ACUERDA:
+
+1) Observar el proyecto del convenio de cooperación entre el Ministerio de Ambiente y la Corporación Nacional para el Desarrollo por lo expresado en los

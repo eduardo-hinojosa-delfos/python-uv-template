@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\2025-17-1-0001522_BHU_reforma_sistema_electrico_CND_Reiteracion_Mantiene_mayo_25 (1) (1).txt
+Sección: VISTO
+Chunk: 0
+Palabras: 43
+Caracteres: 292
+Fecha: 2025-05-20
+Expediente: 2025-17-1-0001522
+Entrada: 1799/2025
+Fecha entrada: N/A
+Materia: Sin información
+Status: Mantiene
+
+=== CONTENIDO ===
+
+VISTO: las actuaciones remitidas por el Banco Hipotecario del Uruguay (BHU) relacionadas con la reiteración del gasto derivado del acuerdo específico con la Corporación Nacional para el Desarrollo (CND) y propuesta para el proyecto “Refacción del sistema eléctrico del edificio sede de BHU”;

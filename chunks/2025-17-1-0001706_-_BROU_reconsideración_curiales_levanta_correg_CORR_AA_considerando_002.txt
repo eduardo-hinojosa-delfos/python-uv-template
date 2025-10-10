@@ -1,0 +1,20 @@
+=== METADATOS ===
+Archivo: extracted_text\2025-17-1-0001706_-_BROU_reconsideración_curiales_levanta_correg_CORR_AA.txt
+Sección: CONSIDERANDO
+Chunk: 2
+Palabras: 100
+Caracteres: 626
+Fecha: 2025-06-30
+Expediente: 2025-17-1-0001706
+Entrada: 2258/2025
+Fecha entrada: N/A
+Materia: Sin información
+Status: Sin información
+
+=== CONTENIDO ===
+
+CONSIDERANDO:
+
+1) que por Resoluciones Resolución N° 986/19 del 10/04/2019); Resolución N° 355/2022 del 2/2/2022 de este Tribunal, se aceptaron los fundamentos realizados por el BROU, los que son de recibo en tanto existe un vínculo indisoluble entre la actividad de otorgamiento de créditos y la recuperación de los que resultan impagos, siendo pilares que tipifican la causal de que se trata, las que definen al Organismo;
+
+2) que en virtud de ello, resulta que ambas son parte insoslayable de una función eminentemente propia del giro comercial del Ente e ínsita en toda entidad de intermediación financiera en cuanto tal;

@@ -1,0 +1,18 @@
+=== METADATOS ===
+Archivo: extracted_text\Expediente-2024-17-1-0001154.txt
+Sección: VISTO
+Chunk: 0
+Palabras: 51
+Caracteres: 308
+Fecha: 2024-03-20
+Expediente: 2024-17-1-0001154.
+Entrada: 1111/2024
+Fecha entrada: 2024-03-20
+Materia: Sin información
+Status: Mantiene
+
+=== CONTENIDO ===
+
+VISTO: las actuaciones remitidas por el Contador Delegado ante la Intendencia de Rocha  relacionada con la Compra Directa con la empresa RAMON C.
+
+ALVAREZ SA,  al amparo del artículo 33 Literal D) Numeral 11) del TOCAF, para la ejecución mejoras en pavimentos en calles del centro de la ciudad de Lascano;-.

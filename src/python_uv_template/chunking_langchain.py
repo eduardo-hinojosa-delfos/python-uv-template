@@ -1,32 +1,28 @@
-# legal_chunker_langchain.py
 """
-Legal chunking en LangChain replicando la lógica de LlamaIndex.
+Segmentación legal en LangChain con lógica compatible con esquemas comunes en documentos jurídicos.
 
-Flujo:
+Flujo general:
 1) Limpieza (pie de página y continuidad de líneas).
-2) Detección de secciones legales (VISTO, RESULTANDO, CONSIDERANDO, ATENTO).
-3) (Opcional) Sub-chunking por sección con RecursiveCharacterTextSplitter.
-4) Extracción de metadatos (fecha, expediente, entrada, fecha_entrada).
-5) Genera List[Document] (LangChain) y persiste a /chunks con cabecera de metadatos.
+2) Detección de secciones: VISTO, RESULTANDO, CONSIDERANDO, ATENTO.
+3) Sub-segmentación opcional por sección mediante RecursiveCharacterTextSplitter.
+4) Extracción de metadatos (fecha, expediente, entrada, fecha_entrada, materia, status).
+5) Creación de List[Document] y persistencia en /chunks con cabecera de metadatos.
 
-Parámetros clave:
-- chunk_size, chunk_overlap: sólo aplican si section_subchunking="recursive".
-- section_subchunking: "none" (1 chunk por sección, comportamiento por defecto) o "recursive".
+Parámetros:
+- section_subchunking: "none" (1 chunk por sección) o "recursive".
+- chunk_size y chunk_overlap: aplican si section_subchunking="recursive".
 """
 
 import re
 import unicodedata
-from typing import Dict
-
 from pathlib import Path
 from dataclasses import dataclass
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Optional
 
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.messages import HumanMessage
 
-# Si tienes disponible tu normalizador, perfecto; si no, se hace fallback grácil.
 try:
     from python_uv_template.ingesta import normalize_date_es
 except Exception:
@@ -44,11 +40,15 @@ class ChunkMetadata:
 
 
 class LegalChunkerLC:
+    """
+    Constructor de chunks legales a partir de texto plano, con limpieza previa,
+    detección de secciones y enriquecimiento de metadatos.
+    """
     def __init__(
         self,
         chunk_size: int = 1000,
         chunk_overlap: int = 150,
-        section_subchunking: str = "none",  # "none" (equivalente a tu LlamaIndex actual) o "recursive"
+        section_subchunking: str = "none",
         llm=None,
     ):
         self.section_patterns = {
@@ -65,27 +65,23 @@ class LegalChunkerLC:
         )
         self.llm = llm
 
-    # ---------- Limpiezas ----------
+    # Limpiezas
     def _strip_trailing_footer(self, text: str) -> str:
-        """
-        Elimina pie de página final si hay múltiples saltos y rutas/URLs.
-        """
+        """Suprime pies de página finales con múltiples saltos y rutas/URLs."""
         pattern = re.compile(
             r"(\n\s*){2,}(?P<footer>([A-Za-z]:\\|/|\\\\|file:|https?://).+)$",
             re.IGNORECASE | re.DOTALL,
         )
         m = pattern.search(text)
-        if m:
-            return text[: m.start()].rstrip()
-        return text
+        return text[: m.start()].rstrip() if m else text
 
     def _merge_line_breaks_for_continuity(self, text: str) -> str:
         """
-        Une saltos de línea intra-párrafo para continuidad, preservando dobles saltos como separadores de párrafo.
-        Respeta abreviaturas y siglas punteadas.
+        Unifica saltos de línea intra-párrafo preservando separadores dobles,
+        y evita cortes por guion al final de línea.
         """
         t = text.replace("\r\n", "\n").replace("\r", "\n")
-        t = re.sub(r"(\w+)-\n(\w+)", r"\1\2", t)  # une palabras cortadas por guion al final de línea
+        t = re.sub(r"(\w+)-\n(\w+)", r"\1\2", t)
 
         lines = t.split("\n")
         merged: List[str] = []
@@ -139,84 +135,57 @@ class LegalChunkerLC:
     def _normalize_for_metadata(self, s: str) -> str:
         """
         Normaliza texto para extracción de metadatos:
-        - NFKC para unificar variantes (e.g., '：' -> ':').
-        - Quita zero-width (u200B-u200D, FEFF).
-        - Convierte NBSP y espacios raros a ' '.
-        - Normaliza guiones largos a '-'.
-        - Normaliza saltos a '\n'.
+        NFKC, supresión de zero-width, espacios no estándar, guiones y saltos.
         """
         if not s:
             return s
-        # Unicode compatibility normalization
         s = unicodedata.normalize("NFKC", s)
-
-        # Quitar zero-width chars (ZWSP, ZWNBSP/BOM)
         s = re.sub(r"[\u200B-\u200D\uFEFF]", "", s)
-
-        # Reemplazar espacios no estándar por espacio normal
         s = s.replace("\u00A0", " ").replace("\u2007", " ").replace("\u202F", " ")
-
-        # Normalizar guiones y dos puntos exóticos
         s = s.replace("–", "-").replace("—", "-").replace("−", "-").replace("：", ":")
-
-        # Saltos consistentes
         s = s.replace("\r\n", "\n").replace("\r", "\n")
-
-        # Compactar espacios redundantes cerca de separadores
-        s = re.sub(r"[ \t]+\n", "\n", s)       # quitar espacios antes de salto
-        s = re.sub(r"\n[ \t]+", "\n", s)       # quitar espacios después de salto
-        s = re.sub(r"[ \t]+:[ \t]+", ": ", s)  # "Materia :   X" -> "Materia: X"
+        s = re.sub(r"[ \t]+\n", "\n", s)
+        s = re.sub(r"\n[ \t]+", "\n", s)
+        s = re.sub(r"[ \t]+:[ \t]+", ": ", s)
         return s
 
     def _first_acuerda_item(self, text_norm: str) -> Optional[str]:
-        """
-        Devuelve el PRIMER ítem (línea) del listado que sigue a 'EL TRIBUNAL ACUERDA'.
-        Acepta bullets: -, •, *, '1)', '1.', 'I)' etc.
-        """
+        """Obtiene el primer ítem tras 'EL TRIBUNAL ACUERDA' cuando hay lista."""
         m = re.search(r"EL\s+TRIBUNAL\s+ACUERDA\s*:?", text_norm, re.IGNORECASE)
         if not m:
             return None
-
         after = text_norm[m.end():]
         lines = after.split("\n")
-
         list_re = re.compile(r"^\s*(?:[-•*]\s+|\d+\)|\d+\.\s+|[IVXLCM]+\)\s+)", re.IGNORECASE)
         for line in lines:
             if not line.strip():
-                # permitir líneas en blanco iniciales
                 continue
             if list_re.match(line):
                 return line.strip()
-            # Si aparece una línea con mucho texto no listada, no la tomamos.
         return None
 
     def _classify_status_with_llm(self, first_item: str) -> Optional[str]:
         """
-        Usa el LLM inyectado para clasificar el primer ítem del 'ACUERDA'
-        en uno de: Mantiene | Observa | No formula | Levanta.
-        Devuelve None si no pudo decidir.
+        Clasifica el primer ítem del bloque ACUERDA en:
+        Mantiene | Observa | No formula | Levanta.
         """
         if not self.llm or not first_item:
             return None
 
         prompt = f"""
-Eres un clasificador estricto. Lee el siguiente enunciado que habla sobre el status de un expediente de jurisprudencia
-y devuelve SOLO una palabra EXACTA entre estas 4 (sin explicaciones, sin comillas, sin espacios extra):
+Eres un clasificador estricto. Lee el siguiente enunciado y devuelve SOLO una palabra EXACTA:
 Mantiene | Observa | No formula | Levanta.
-
-Dame la palabra que mejor se adecúe para representar dicho enunciado.
 
 Enunciado:
 {first_item}
 
-Respuesta (una sola palabra de la lista):
+Respuesta:
 """.strip()
 
         try:
             resp = self.llm.invoke([HumanMessage(content=prompt)])
-            label = (resp.content or "").strip()
-            # Normaliza y valida respuesta
-            label_norm = label.lower()
+            label = (resp.content or "").strip().lower().strip('"').strip("'")
+            label = re.sub(r"\s+", " ", label)
             mapping = {
                 "mantiene": "Mantiene",
                 "observa": "Observa",
@@ -224,23 +193,14 @@ Respuesta (una sola palabra de la lista):
                 "noformula": "No formula",
                 "levanta": "Levanta",
             }
-            # limpiar posibles comillas
-            label_norm = label_norm.strip('"').strip("'")
-            # quitar espacios dobles
-            label_norm = re.sub(r"\s+", " ", label_norm)
-
-            return mapping.get(label_norm, None)
+            return mapping.get(label, None)
         except Exception:
             return None
 
-
     def _extract_document_metadata(self, text: str) -> Dict[str, str]:
-        # ===== Normalización fuerte ANTES de todo =====
+        """Extrae metadatos clave del encabezado y deduce materia/status con reglas y LLM opcional."""
         text_norm = self._normalize_for_metadata(text)
-
-        # Mantiene la lógica original para fecha, expediente, entrada (usando head normalizado)
         head = text_norm[:3000]
-        # tail = text_norm[-3000:]  # ya no es necesario usar tail: buscaremos en todo
 
         date_normalized = normalize_date_es(head) or ""
 
@@ -262,12 +222,11 @@ Respuesta (una sola palabra de la lista):
         )
         if m_ent_fecha:
             entrada = m_ent_fecha.group(1).strip()
-            dmy = m_ent_fecha.group(2)
+            d, m, y = m_ent_fecha.group(2).split("/")
             try:
-                d, m, y = dmy.split("/")
                 fecha_entrada = f"{int(y):04d}-{int(m):02d}-{int(d):02d}"
             except Exception:
-                fecha_entrada = dmy
+                fecha_entrada = m_ent_fecha.group(2)
         else:
             m_ent = re.search(
                 r"\b(Entrada|N[úu]mero\s+de\s+entrada)\b\s*(?:N[°ºoO])?\s*[:\-]*\s*([\w./-]+)",
@@ -276,56 +235,33 @@ Respuesta (una sola palabra de la lista):
             )
             if m_ent:
                 entrada = m_ent.group(2).strip()
+            fecha_entrada = fecha_entrada or "N/A"
 
-        if not fecha_entrada:
-            fecha_entrada = "N/A"
-
-        # ===== Extracción robusta de MATERIA y STATUS =====
         materia = "Sin información"
         status = "Sin información"
 
-        # 1) Preferencia: líneas individuales tipo "Materia: ..." / "Status: ..."
-        #    ^\s* para tolerar indentación; MULTILINE para anclar por líneas
-        line_materia = re.search(
-            r"(?im)^\s*Materia\s*[:\-]\s*(.+?)\s*$",
-            text_norm,
-        )
+        line_materia = re.search(r"(?im)^\s*Materia\s*[:\-]\s*(.+?)\s*$", text_norm)
         if line_materia:
             val = line_materia.group(1).strip()
             materia = val if val else "Sin información"
 
-        line_status = re.search(
-            r"(?im)^\s*Status\s*[:\-]\s*(.+?)\s*$",
-            text_norm,
-        )
+        line_status = re.search(r"(?im)^\s*Status\s*[:\-]\s*(.+?)\s*$", text_norm)
         if line_status:
             val = line_status.group(1).strip()
             status = val if val else "Sin información"
 
-        # 2) Fallback: ambos en una sola línea (Materia: ... // Status: ...)
-        #    Solo si alguno no se encontró por la vía de líneas
         if materia == "Sin información" or status == "Sin información":
-            # Delimitadores para cortar valores
             _DELIMS = r"(?:\/\/|;|\||,|\n{2,}|$|\bStatus\b|\bMateria\b)"
             materia_pat = re.compile(
                 rf"\bMateria\s*[:\-]?\s*(.+?)(?=\s*{_DELIMS})",
                 flags=re.IGNORECASE | re.DOTALL,
             )
-            status_pat = re.compile(
-                rf"\bStatus\s*[:\-]?\s*(.+?)(?=\s*{_DELIMS})",
-                flags=re.IGNORECASE | re.DOTALL,
-            )
 
-            def _clean_value(v: str) -> str:
+            def _clean_value(v: Optional[str]) -> str:
                 if v is None:
                     return "Sin información"
-                v = v.strip()
-                # quitar separadores residuales al final
-                v = re.sub(r"\s*(?:\/\/|;|\||,)\s*$", "", v).strip()
-                # si solo quedan espacios/símbolos no alfanuméricos, considera vacío
-                if not re.search(r"[A-Za-zÁÉÍÓÚáéíóúÑñ0-9]", v):
-                    return "Sin información"
-                return v
+                v = re.sub(r"\s*(?:\/\/|;|\||,)\s*$", "", v.strip())
+                return v if re.search(r"[A-Za-zÁÉÍÓÚáéíóúÑñ0-9]", v) else "Sin información"
 
             if materia == "Sin información":
                 mm = materia_pat.search(text_norm)
@@ -346,22 +282,20 @@ Respuesta (una sola palabra de la lista):
             "materia": materia,
             "status": status,
         }
-    # ---------- Normalización de ATENTO / "EL TRIBUNAL ACUERDA" ----------
+
     def _process_atento_acuerda_block(self, section_text: str) -> str:
+        """Estandariza el bloque 'EL TRIBUNAL ACUERDA' y conserva el listado inmediatamente posterior."""
         m = re.search(r"EL\s+TRIBUNAL\s+ACUERDA\s*:?", section_text, re.IGNORECASE)
         if not m:
             return section_text
 
-        start = m.start()
-        end = m.end()
+        start, end = m.start(), m.end()
         before = section_text[:start].rstrip()
         after = section_text[end:].lstrip("\n ")
 
         lines = after.replace("\r\n", "\n").replace("\r", "\n").split("\n")
         list_lines: List[str] = []
-        list_pattern = re.compile(
-            r"^\s*(?:[-•*]\s+|\d+\)|\d+\.\s+|[IVXLCM]+\)\s+)", re.IGNORECASE
-        )
+        list_pattern = re.compile(r"^\s*(?:[-•*]\s+|\d+\)|\d+\.\s+|[IVXLCM]+\)\s+)", re.IGNORECASE)
 
         in_list = False
         for line in lines:
@@ -375,15 +309,15 @@ Respuesta (una sola palabra de la lista):
                 continue
             if in_list:
                 break
-            continue
 
         header_norm = "EL TRIBUNAL ACUERDA:"
         body = "\n".join(list_lines).strip()
         acordado = header_norm + "\n\n" + body if body else header_norm
         return (before + "\n\n" + acordado).strip()
 
-    # ---------- Detección de secciones ----------
+    # Detección de secciones
     def find_sections(self, text: str) -> List[Dict[str, str]]:
+        """Identifica y devuelve secciones principales del documento ya limpiado."""
         cleaned = self._strip_trailing_footer(text)
         cleaned = self._merge_line_breaks_for_continuity(cleaned)
 
@@ -403,10 +337,15 @@ Respuesta (una sola palabra de la lista):
             sections.append({"name": name, "text": section_text})
         return sections
 
-    # ---------- Creación de Documents ----------
+    # Construcción de Documents
     def create_documents_from_text(self, text: str, file_name: str, doc_meta: Dict[str, str]) -> List[Document]:
+        """
+        Crea documentos por sección con metadatos consolidados. Asigna chunk_index
+        secuencial a lo largo de TODO el archivo (no se reinicia por sección).
+        """
         sections = self.find_sections(text)
         documents: List[Document] = []
+        running_idx = 0
 
         for section in sections:
             section_text = section["text"]
@@ -414,14 +353,12 @@ Respuesta (una sola palabra de la lista):
                 section_text = self._process_atento_acuerda_block(section_text)
 
             if self.section_subchunking == "recursive":
-                # sub-chunking por sección (si quieres volver al docstring original)
-                # Nota: preservamos metadata y enumeramos chunk_index por sección
                 sub_docs = self.splitter.create_documents([section_text])
-                for idx, d in enumerate(sub_docs):
+                for d in sub_docs:
                     md = {
                         "section": section["name"],
                         "source_file": file_name,
-                        "chunk_index": idx,
+                        "chunk_index": running_idx,
                         "word_count": len(d.page_content.split()),
                         "char_count": len(d.page_content),
                         "date": doc_meta.get("date", ""),
@@ -432,12 +369,12 @@ Respuesta (una sola palabra de la lista):
                         "status": doc_meta.get("status", "Sin información"),
                     }
                     documents.append(Document(page_content=d.page_content, metadata=md))
+                    running_idx += 1
             else:
-                # 1 chunk por sección (comportamiento actual equivalente a tu LlamaIndex)
                 md = {
                     "section": section["name"],
                     "source_file": file_name,
-                    "chunk_index": 0,
+                    "chunk_index": running_idx,
                     "word_count": len(section_text.split()),
                     "char_count": len(section_text),
                     "date": doc_meta.get("date", ""),
@@ -448,10 +385,12 @@ Respuesta (una sola palabra de la lista):
                     "status": doc_meta.get("status", "Sin información"),
                 }
                 documents.append(Document(page_content=section_text, metadata=md))
+                running_idx += 1
 
         return documents
 
-    # ---------- Persistencia a /chunks ----------
+
+    # Persistencia
     def persist_documents(self, documents: List[Document], output_folder: str = "chunks") -> None:
         out_path = Path(output_folder)
         out_path.mkdir(exist_ok=True)
@@ -473,16 +412,20 @@ Respuesta (una sola palabra de la lista):
                 f.write(f"Expediente: {doc.metadata.get('expediente','')}\n")
                 f.write(f"Entrada: {doc.metadata.get('entrada','')}\n")
                 f.write(f"Fecha entrada: {doc.metadata.get('fecha_entrada','')}\n")
+                f.write(f"Materia: {doc.metadata.get('materia','Sin información')}\n")
+                f.write(f"Status: {doc.metadata.get('status','Sin información')}\n")
                 f.write("\n=== CONTENIDO ===\n")
                 f.write(doc.page_content)
 
-    # ---------- Pipeline principal ----------
+
+    # Pipeline principal
     def process_txt_folder(
         self,
         txt_folder: str = "extracted_text",
         output_folder: str = "chunks",
         persist: bool = True,
     ) -> List[Document]:
+        """Ejecuta el pipeline completo sobre una carpeta de .txt y devuelve la lista de documentos."""
         txt_path = Path(txt_folder)
         txt_files = sorted(list(txt_path.glob("*.txt")))
 
@@ -519,18 +462,15 @@ Respuesta (una sola palabra de la lista):
         return all_docs
 
 
-# ---------- Función de conveniencia ----------
 def generate_langchain_chunks_from_txt(
     txt_folder: str = "extracted_text",
     output_folder: str = "chunks",
-    section_subchunking: str = "none",  # "none" (igual a tu implementación actual) o "recursive"
+    section_subchunking: str = "none",
     chunk_size: int = 1000,
     chunk_overlap: int = 150,
     persist: bool = True,
 ) -> List[Document]:
-    """
-    Construye y ejecuta el pipeline de chunking en LangChain.
-    """
+    """Construye y ejecuta el pipeline de chunking en LangChain para una carpeta de textos."""
     chunker = LegalChunkerLC(
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
@@ -543,11 +483,8 @@ def generate_langchain_chunks_from_txt(
     )
 
 
-# ---------- CLI / main ----------
 if __name__ == "__main__":
     try:
-        # Por defecto conserva 1 chunk por sección (como tu LlamaIndex actual).
-        # Si quieres sub-chunking por sección, usa section_subchunking="recursive".
         docs = generate_langchain_chunks_from_txt(
             txt_folder="extracted_text",
             output_folder="chunks",

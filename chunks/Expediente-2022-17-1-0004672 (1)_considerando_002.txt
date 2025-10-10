@@ -1,0 +1,20 @@
+=== METADATOS ===
+Archivo: extracted_text\Expediente-2022-17-1-0004672 (1).txt
+Sección: CONSIDERANDO
+Chunk: 2
+Palabras: 174
+Caracteres: 1148
+Fecha: 2022-09-28
+Expediente: 2022-17-1-0004672.
+Entrada: 3773/2022.
+Fecha entrada: N/A
+Materia: Sin información
+Status: Observa
+
+=== CONTENIDO ===
+
+CONSIDERANDO: 1) que  el Art. 33 Lit. D) Nral. 11) del T.O.C.A.F. establece  como  excepción  la  siguiente:  “La  contratación  de  obras  de infraestructura vial y caminería por parte de los Gobiernos Departamentales en acuerdo con el Ministerio de Transporte y Obras Públicas, a una empresa contratista  que  se  encuentre  realizando  localmente  obras  viales  en  rutas nacionales, cuando el objeto de la contratación directa refiera a vías de acceso o  caminería  integradas  o  asociadas  al  trazado  adjudicado  a  la  empresa contratista. La descripción del proyecto a ejecutar y los fundamentos detallados de su conveniencia, constituirán parte sustancial de la motivación del acto que disponga la contratación”;
+
+2) que en el caso,  si bien se adjunta cuadro de descripción del proyecto, y el rubrado del MTOP,  no surgen los fundamentos de su conveniencia,  ni documentación que respalde que haya existido acuerdo con el citado Ministerio a efectos de la realización de la compra directa;
+
+3) que no pueden comprometerse gastos sin que exista crédito disponible suficiente en el rubro de imputación contable (Art. 15 del T.O.C.A.F.);

@@ -1,0 +1,19 @@
+=== METADATOS ===
+Archivo: extracted_text\2021-17-1-0003971_BROU_Curial_no_levanta_obs.txt
+Sección: ATENTO
+Chunk: 3
+Palabras: 48
+Caracteres: 316
+Fecha: 2022-03-29
+Expediente: 2021-17-1-
+Entrada: 1102/2022
+Fecha entrada: N/A
+Materia: Reconsideración de Observaciones
+Status: Mantiene
+
+=== CONTENIDO ===
+ATENTO: a lo precedentemente expuesto;
+
+EL TRIBUNAL ACUERDA:
+
+1) Estar a lo dispuesto en Resolución N° 2080/2021 de fecha 29 de setiembre de 2021, por la que se observa la contratación de referencia; y 2) Oficiar.- Dr. Daoiz S. Uriarte Departamento Jurídico MATERIA: Reconsideración de Observaciones STATUS: Mantiene

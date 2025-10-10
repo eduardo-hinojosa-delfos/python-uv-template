@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\2025-17-1-0001706_-_BROU_reconsideración_curiales_levanta_correg_CORR_AA.txt
+Sección: VISTO
+Chunk: 0
+Palabras: 31
+Caracteres: 201
+Fecha: 2025-06-30
+Expediente: 2025-17-1-0001706
+Entrada: 2258/2025
+Fecha entrada: N/A
+Materia: Sin información
+Status: Sin información
+
+=== CONTENIDO ===
+
+VISTO: los nuevos antecedentes remitidos por el Banco de la República Oriental del Uruguay (BROU) relacionados con la contratación de curiales para patrocinar al Ente Autónomo en el Interior del país;

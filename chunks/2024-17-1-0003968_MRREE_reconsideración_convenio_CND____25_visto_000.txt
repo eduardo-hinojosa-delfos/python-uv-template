@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\2024-17-1-0003968_MRREE_reconsideración_convenio_CND____25.txt
+Sección: VISTO
+Chunk: 0
+Palabras: 33
+Caracteres: 239
+Fecha: 2025-02-19
+Expediente: 2024-17-1-0003968
+Entrada: 0601/2025
+Fecha entrada: N/A
+Materia: Sin información
+Status: Mantiene
+
+=== CONTENIDO ===
+
+VISTO: las nuevas actuaciones remitidas por el Ministerio de Relaciones Exteriores (MRREE), relacionadas con la observación del gasto emergente del convenio de cooperación a celebrarse con la Corporación Nacional para el Desarrollo (CND);

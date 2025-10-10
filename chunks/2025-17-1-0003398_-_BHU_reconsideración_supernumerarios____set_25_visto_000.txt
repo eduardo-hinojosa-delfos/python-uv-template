@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\2025-17-1-0003398_-_BHU_reconsideración_supernumerarios____set_25.txt
+Sección: VISTO
+Chunk: 0
+Palabras: 29
+Caracteres: 199
+Fecha: 2025-09-16
+Expediente: 2025-17-1-0003398
+Entrada: 3109/2025
+Fecha entrada: N/A
+Materia: Sin información
+Status: Sin información
+
+=== CONTENIDO ===
+
+VISTO: el Oficio N° 133/25, de fecha 18/8/2025, remitido por el Banco Hipotecario del Uruguay (BHU), relacionado con la reiteración del gasto del pago de honorarios de profesionales supernumerarios;

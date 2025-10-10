@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\2024-17-1-0002161_MEC_CND_Convenio_FIDAE__Observa_CND_.txt
+Sección: VISTO
+Chunk: 0
+Palabras: 51
+Caracteres: 341
+Fecha: 2024-05-30
+Expediente: 2024-17-1-0002161
+Entrada: 2037/2024
+Fecha entrada: N/A
+Materia: Convenio
+Status: Observado
+
+=== CONTENIDO ===
+
+VISTO: los antecedentes remitidos por el Ministerio de Educación y Cultura (MEC), relacionados con el convenio de cooperación a celebrarse con la Corporación Nacional para el Desarrollo (CND), en el marco de la octava edición del Festival Internacional de Artes Escénicas (FIDAE) 2024, organizado por la Dirección Nacional de Cultura (DNC);

@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\Expediente-2024-17-1-0001154.txt
+Sección: CONSIDERANDO
+Chunk: 2
+Palabras: 93
+Caracteres: 582
+Fecha: 2024-03-20
+Expediente: 2024-17-1-0001154.
+Entrada: 1111/2024
+Fecha entrada: 2024-03-20
+Materia: Sin información
+Status: Mantiene
+
+=== CONTENIDO ===
+
+CONSIDERANDO: 1) que el Numeral 11 del Literal D del artículo 33 del TOCAF establece que los Gobiernos Departamentales podrán contratar en forma directa trabajos de infraestructura vial y caminería en acuerdo con el MTOP con empresa que se encuentre realizando localmente obras viales en rutas  nacionales cuando el objeto de la contratación directa  refiera a vías de acceso o caminería integrada o asociadas al trazado adjudicado a la Empresa 2)  que no consta la autorización del MTOP para la contratación directa; desconociéndose si la obra con el MTOP aun se sigue ejecutando;

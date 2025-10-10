@@ -1,0 +1,54 @@
+=== METADATOS ===
+Archivo: extracted_text\2025-17-1-0001790_Convenio_de_cooperación-MA_con_CND_-_observada (1).txt
+Sección: RESULTANDO
+Chunk: 1
+Palabras: 1506
+Caracteres: 9633
+Fecha: 2025-05-07
+Expediente: 2025-17-1-0001790.
+Entrada: 1724/2025
+Fecha entrada: N/A
+Materia: (literal “A”)
+Status: Observa
+
+=== CONTENIDO ===
+
+RESULTANDO:
+
+1) que de acuerdo al proyecto de convenio remitido, el objeto del mismo consiste en establecer los contenidos y el alcance de la cooperación entre las partes, a los efectos de prestar servicios de administración de fondos, de recursos humanos y/o de administración contable y financiera, de los fondos transferidos por el M.A. a la C.N.D., a fin de colaborar en la implementación de proyectos relacionados con sus cometidos (cláusula segunda: “Objeto”);
+
+2) que para la ejecución del convenio, el M.A. transferirá a la C.N.D. la suma de $ 59:000.000 anuales, cantidad que podrá ser complementada con otra u otras partidas dependiendo de la necesidad de fondos para el logro de los objetivos pretendidos; asimismo, podrá ser complementada con apoyos, subvenciones y/o donaciones provenientes de organismos públicos como de privados. Al respecto, “la C.N.D. administrará los fondos y realizará las contrataciones según las directivas e instrucciones precisas recibidas de parte del M.A.”, las que se impartirán por escrito (cláusula tercera: “Fondos administrados y personas autorizadas”);
+
+3) que la instrumentación del convenio se regirá con los siguientes criterios y procedimientos: i) los recursos destinados a la ejecución de este convenio serán depositados por el M.A. en una institución financiera de plaza, en una cuenta especial de la C.N.D. que abrirá, de manera exclusiva, previéndose que los intereses generados durante la ejecución del convenio, serán depositados por la C.N.D. en la referida cuenta, ii) en todos los casos, los gastos y comisiones bancarias serán de cargo de los fondos aportados por el M.A., iii) la gestión de los fondos será realizada en pesos uruguayos o dólares estadounidenses, iv) la C.N.D. mantendrá los registros, efectuará las rendiciones requeridas y llevará las cuentas con los requerimientos y condiciones generalmente aceptados, v) la C.N.D. elaborará una rendición de cuentas de los gastos vinculados a la ejecución del convenio, conforme a lo dispuesto por los artículos 132, 133 y 159 del Decreto N° 150/2012 (T.O.C.A.F.) y la Ordenanza N° 77 del Tribunal de Cuentas, y vi) en todos los casos que se realicen contratos de consultoría o de prestación de servicios con terceros por cuenta y orden de los aportantes, la C.N.D. actuará como agente de retención de los tributos que correspondan (cláusula cuarta:
+
+“Criterios y Procedimientos”);
+
+4) que el plazo del convenio será de un año desde su celebración, y se prorrogará automáticamente por iguales períodos, salvo que alguna de las partes notifique a la otra de su intención de no proceder a la prórroga, con una anticipación mínima de treinta días de su vencimiento (cláusula sexta: “Plazo”);
+
+5)
+
+que por concepto de honorarios por la administración de fondos se abonará lo siguiente: i) por la administración de los fondos, la C.N.D. percibirá una remuneración equivalente al 4% más IVA mensual, sobre lo efectivamente ejecutado, entendiéndose por tal la suma de pagos realizados dentro del mismo mes, de los fondos disponibles, ii) si se realizaran colocaciones financieras, de acuerdo con el programa de desembolsos en los instrumentos financieros disponibles en plaza, la C.N.D. percibirá un 20% más IVA de la rentabilidad neta obtenida por mes por este concepto, iii) si el M.A. solicitara la realización de otras tareas no previstas en el marco de la cláusula segunda del convenio, las partes acordarán los honorarios, de acuerdo con la complejidad del procedimiento, iv) los honorarios se facturarán mensualmente en moneda nacional, de acuerdo con los criterios expuestos. Tales honorarios pactados, así como todos los gastos, incluyendo los bancarios, de auditoría y revisión limitada, se cobrarán directamente de los fondos transferidos al convenio, a cuyos efectos la C.N.D. debitará de la cuenta abierta y rendirá las cuentas correspondientes, y v) el M.A. deberá disponer de los fondos suficientes en la cuenta como para que la C.N.D. haga efectivo el cobro de sus honorarios y gastos, siendo el honorario percibido en moneda nacional (cláusula séptima: “Precio”);
+
+6) que respecto a las responsabilidades se estipula que: i) el M.A. será el único responsable por los pagos y/o contrataciones que instruya a la C.N.D. y se obligan a mantener indemne a la C.N.D. por cualquier reclamo derivado de las relaciones que originen dichos pagos y/o contratos, asumiendo el pago de cualquier reclamo que pudiere surgir por este concepto, ii) el M.A. declara expresamente conocer y aceptar que la C.N.D. es parte formal y no sustancial en dichos contratos, actuando ésta única y exclusivamente por cuenta y orden del Ministerio, a efectos de instrumentar los contratos y realizar los pagos cuando así se le instruya, y iii) el Ministerio mantendrá indemne a la C.N.D. por cualquier reclamo que pudieren efectuarle y que fuere originado en la ejecución de este acuerdo, salvo incumplimiento de esta última de las obligaciones asumidas (cláusula octava:
+
+“Responsabilidades”);
+
+7) que las partes acuerdan que, si fueran necesarias otras actividades específicas de las ya pactadas, que puedan incluir a otros actores y que impliquen los aportes de recursos para hacerlas efectivas, se coordinará para cada caso entre las partes y serán motivo de nuevos acuerdos complementarios al presente los que, asimismo, deberán ser suscriptos por los representantes legales de las instituciones involucradas (cláusula novena “Acuerdos complementarios”);
+
+8) que asimismo se pactan estipulaciones respecto a lo siguiente: i) la obligación de guardar secreto en su sentido más amplio respecto de la información que sea proporcionada en virtud de la ejecución del presente convenio, siempre que no se contravenga disposiciones vigentes como las Leyes N° 18.331, de fecha 11 de agosto de 2008, N° 18.381, de fecha 17 de octubre de 2008, y modificativas (cláusula décima:
+
+“Declaraciones”), ii) observar y aplicar, de acuerdo a la normativa vigente, los más altos niveles éticos y estándares de transparencia en la ejecución del presente convenio (cláusula décima primera: “Compromiso anticorrupción”), y iii) el M.A. declara los fondos que serán administrados en virtud del objeto del presente convenio son de carácter público y/o que los mismos no provienen de actividades ilícitas, particularmente de lavado de activos o financiación del terrorismo declarándose, además, que los referidos fondos no serán destinados para realizar o financiar ninguna de las mencionadas actividades ilícitas (cláusula décima segundo: “Prevención de lavado de activos y financiación del terrorismo”);
+
+9) que el gasto comprometido será con cargo a la Unidad Ejecutora 001 “Dirección General de Secretaría”, Programa 380 y Proyecto de Inversión 700; Unidad Ejecutora 002 “Dirección Nacional de Calidad y Evaluación Ambiental”, Programa 380, Proyectos de Inversión 735, 742, 747, 748 y 752 del presupuesto de esta Unidad Ejecutora; Unidad Ejecutora 004 “Dirección Nacional de Biodiversidad y Servicios Ecosistémicos”, Programa 380, Proyecto de Inversión 736 y 753 y Unidad Ejecutora 005 “Dirección Nacional de Cambio Climático”, Programa 382, Proyecto de Inversión 781, debiéndose indicar que en esta oportunidad se transferirán $ 20:000.000, siendo el gasto emergente con cargo a la Unidad Ejecutora 002, Programa 380, Financiamiento 1.1., en los siguientes Proyectos de Inversión y montos: 735 por el monto de $ 6:500.000; 748 por el monto de $ 9:000.000 y 752 por el monto de $ 500.000; asimismo se hará con cargo a la Unidad Ejecutora 002, Programa 380, Financiamiento 1.2 en el siguiente Proyecto de Inversión y monto: 752 por el monto de $ 4:000.000;
+
+10) que se adjunta proyecto de Resolución a dictarse por el Poder Ejecutivo por el cual se prevé: i) autorizar la suscripción del convenio reseñado, por un importe de hasta $ 59:000.000, anuales hasta la finalización del convenio, ii) los gastos emergentes del mismo se solventarán con cargo a las Unidades Ejecutoras y a los Proyectos de Inversión ya expresados en el Resultando 9) y iii) cometer la firma del convenio al Señor Ministro de Ambiente;
+
+11) que con fecha 09 de abril de 2025, el Área Jurídica del Ministerio de Ambiente concluye – entre otras consideraciones – no tener observaciones jurídicas que formular al proyecto de convenio que se pretende suscribir;
+
+12) que con fecha 24 de abril de 2025, la Contaduría General de la Nación del Ministerio de Economía y Finanzas, hace constar que, para el presente ejercicio se reserva el crédito presupuestal en la llave de imputación que corresponde, según afectaciones de la Unidad Ejecutora 002, N° 143 por un importe de $ 16:000.000, Financiación 1.1, y N° 144 por un importe de $ 4:000.000, Financiación 1.2;
+
+13) que luce la siguiente documentación contable: i)
+
+Afectación N°000143 y N° 000144, ambos de fecha 10 de abril de 2025, con cargo al Inciso 36 “Ministerio de Ambiente”, a la Unidad Ejecutora 002 “Dirección Nacional de Calidad y Evaluación Ambiental”, Financiamiento 1.1 “Rentas Generales” y 1.2 “Recursos con afectación especial”, respectivamente, Programa 380, Proyecto 735-748-752 y 752, respectivamente, Objeto del Gasto 529, Tipo de cambio 3, por los totales nominales de $ 16:000.000 y $ 4:000.000, respectivamente. ii) Compromisos N° 001, ambos de fecha 10 de abril de 2025, de las afectaciones anteriormente referidas, por los totales nominales previamente indicados;
+
+14) que remitidas las actuaciones reseñadas a la Contadora Auditora destacada ante el M.A., con fecha 25 de abril ppdo., remite las mismas a consideración del Tribunal Central en tanto el monto del pre citado convenio excede sus competencias;

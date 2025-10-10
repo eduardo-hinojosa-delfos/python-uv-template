@@ -1,0 +1,20 @@
+=== METADATOS ===
+Archivo: extracted_text\2025-17-1-0003398_-_BHU_reconsideración_supernumerarios____set_25.txt
+Sección: CONSIDERANDO
+Chunk: 2
+Palabras: 198
+Caracteres: 1271
+Fecha: 2025-09-16
+Expediente: 2025-17-1-0003398
+Entrada: 3109/2025
+Fecha entrada: N/A
+Materia: Sin información
+Status: Sin información
+
+=== CONTENIDO ===
+
+CONSIDERANDO: 1) que el artículo 33 del TOCAF establece excepciones para las contrataciones que deben realizarse -por principio- mediante procedimiento competitivo, entre las cuales se encuentra la dispuesta en el numeral 4) del literal D) del artículo 33 del TOCAF que prevé: “Cuando el bien o servicio integre de manera directa o indirecta la oferta comercial de una entidad pública, que actúe en régimen de competencia”;
+
+2) que el artículo 18 de la Ley N° 5.343, de fecha 22/10/1915 (Carta Orgánica del Banco Hipotecario del Uruguay), en la redacción dada por el artículo 1° de la Ley N° 18.125, de fecha 27/4/2007, establece que el Banco actuará como institución financiera especializada en el crédito hipotecario, para facilitar el acceso a la vivienda, pudiendo otorgar créditos en moneda nacional, unidades indexadas o unidades reajustables, con garantía hipotecaria;
+
+3) que son de recibo los argumentos expresados por el Ente en cuanto a que la actividad desarrollada por los profesionales supernumerarios es un servicio necesario e imprescindible en el proceso de la concesión de los préstamos hipotecarios y, fundamentalmente, en su eventual recuperación, lo que forma parte de la oferta comercial del Banco, él cuál se desenvuelve en régimen de competencia;

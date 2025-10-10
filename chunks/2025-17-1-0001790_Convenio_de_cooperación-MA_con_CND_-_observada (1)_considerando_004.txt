@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\2025-17-1-0001790_Convenio_de_cooperación-MA_con_CND_-_observada (1).txt
+Sección: CONSIDERANDO
+Chunk: 4
+Palabras: 19
+Caracteres: 119
+Fecha: 2025-05-07
+Expediente: 2025-17-1-0001790.
+Entrada: 1724/2025
+Fecha entrada: N/A
+Materia: (literal “A”)
+Status: Observa
+
+=== CONTENIDO ===
+
+Considerando 5) a 9); y 2) Devolver las actuaciones.- Renato Echeverría Adjunto a la Dirección de la División Jurídica

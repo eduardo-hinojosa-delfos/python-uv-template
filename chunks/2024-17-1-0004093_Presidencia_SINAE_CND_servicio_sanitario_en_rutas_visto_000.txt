@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\2024-17-1-0004093_Presidencia_SINAE_CND_servicio_sanitario_en_rutas.txt
+Sección: VISTO
+Chunk: 0
+Palabras: 26
+Caracteres: 180
+Fecha: 2024-10-14
+Expediente: 2024-17-1-0004093
+Entrada: 3714/2024
+Fecha entrada: N/A
+Materia: Sin información
+Status: Sin información
+
+=== CONTENIDO ===
+
+VISTO: las actuaciones remitidas por la Presidencia de la República, relacionadas con el proyecto de convenio  a suscribirse  con la Corporación Nacional para el Desarrollo (CND);

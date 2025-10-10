@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\2021-17-1-0003971_BROU_Curial_no_levanta_obs.txt
+Sección: VISTO
+Chunk: 0
+Palabras: 43
+Caracteres: 309
+Fecha: 2022-03-29
+Expediente: 2021-17-1-
+Entrada: 1102/2022
+Fecha entrada: N/A
+Materia: Reconsideración de Observaciones
+Status: Mantiene
+
+=== CONTENIDO ===
+
+VISTO: los nuevos antecedentes remitidos por el Banco de la República Oriental del Uruguay (BROU) relacionados con la contratación de la Dra. Silvia Romero para patrocinar al Organismo en expedientes de carteras adquiridas administradas por Recuperación Corporativa, en régimen de arrendamiento de servicios;

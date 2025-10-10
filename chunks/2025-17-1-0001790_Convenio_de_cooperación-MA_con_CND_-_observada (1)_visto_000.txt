@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\2025-17-1-0001790_Convenio_de_cooperación-MA_con_CND_-_observada (1).txt
+Sección: VISTO
+Chunk: 0
+Palabras: 31
+Caracteres: 222
+Fecha: 2025-05-07
+Expediente: 2025-17-1-0001790.
+Entrada: 1724/2025
+Fecha entrada: N/A
+Materia: (literal “A”)
+Status: Observa
+
+=== CONTENIDO ===
+
+VISTO: las actuaciones remitidas por la Contadora Auditora destacada ante el Ministerio de Ambiente (M.A.), relacionadas con el convenio de cooperación a celebrarse con la Corporación Nacional para el Desarrollo (C.N.D.);

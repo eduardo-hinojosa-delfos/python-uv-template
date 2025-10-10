@@ -1,0 +1,21 @@
+=== METADATOS ===
+Archivo: extracted_text\2024-17-1-0003968_MRREE_reconsideración_convenio_CND____25.txt
+Sección: ATENTO
+Chunk: 3
+Palabras: 43
+Caracteres: 280
+Fecha: 2025-02-19
+Expediente: 2024-17-1-0003968
+Entrada: 0601/2025
+Fecha entrada: N/A
+Materia: Sin información
+Status: Mantiene
+
+=== CONTENIDO ===
+ATENTO: a lo precedentemente expuesto;
+
+EL TRIBUNAL ACUERDA:
+
+1) Estar a lo dispuesto en la Resolución del Tribunal 2461/2024, adoptada en sesión de fecha 02/10/2024;
+
+2) Tener presente lo señalado en el Considerando 3); y 3) Devolver las actuaciones a la Administración actuante.

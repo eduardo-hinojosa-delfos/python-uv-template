@@ -1,0 +1,18 @@
+=== METADATOS ===
+Archivo: extracted_text\2025-17-1-0001705-_BROU_reconsideración_curial_Silvia_Romero_levanta_obs.txt
+Sección: CONSIDERANDO
+Chunk: 2
+Palabras: 106
+Caracteres: 656
+Fecha: 2025-08-26
+Expediente: 2025-17-1-0001705
+Entrada: 3157/2025
+Fecha entrada: N/A
+Materia: Sin información
+Status: Sin información
+
+=== CONTENIDO ===
+
+CONSIDERANDO: 1) que por Resoluciones del Tribunal de Cuentas N° 986/19 de 10/04/2019, N° 355/2022 de 02/02/2022 y N° 1634/2025 de 09/07/2025, se aceptaron los fundamentos manifestados por el BROU, los que son de recibo, en tanto existe un vínculo indisoluble entre la actividad de otorgamiento de créditos y la recuperación de los que resultan impagos, siendo pilares que tipifican la causal de que se trata, las que definen a ese Organismo;
+
+2) que en virtud de ello, resulta que ambas actividades son parte insoslayable de una función eminentemente propia del giro comercial del Ente e ínsita en toda entidad de intermediación financiera en cuanto tal;

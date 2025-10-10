@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\2025-17-1-0003564_MEC_CND_Convenio_FIDAE_2025_agosto_25 (1).txt
+Sección: VISTO
+Chunk: 0
+Palabras: 47
+Caracteres: 320
+Fecha: 2025-08-29
+Expediente: 2025-17-1-0003564
+Entrada: 3237/2025
+Fecha entrada: N/A
+Materia: Sin información
+Status: Mantiene
+
+=== CONTENIDO ===
+
+VISTO: los antecedentes remitidos por el Ministerio de Educación y Cultura (MEC), relacionados con el convenio de cooperación a celebrarse con la Corporación Nacional para el Desarrollo (CND), en el marco del Festival Internacional de Artes Escénicas (FIDAE) 2025, organizado por la Dirección Nacional de Cultura (DNC);

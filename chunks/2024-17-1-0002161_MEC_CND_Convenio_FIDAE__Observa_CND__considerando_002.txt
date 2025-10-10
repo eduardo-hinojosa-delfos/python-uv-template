@@ -1,0 +1,24 @@
+=== METADATOS ===
+Archivo: extracted_text\2024-17-1-0002161_MEC_CND_Convenio_FIDAE__Observa_CND_.txt
+Sección: CONSIDERANDO
+Chunk: 2
+Palabras: 403
+Caracteres: 2465
+Fecha: 2024-05-30
+Expediente: 2024-17-1-0002161
+Entrada: 2037/2024
+Fecha entrada: N/A
+Materia: Convenio
+Status: Observado
+
+=== CONTENIDO ===
+
+CONSIDERANDO: 1) que de acuerdo al Decreto N° 63/998, de 18/03/1998, compete al MEC elaborar políticas, planes y programas referidos a la educación, la cultura, la ciencia y tecnología y el desarrollo humano, dentro de su ámbito de competencia, así como fomentar la cultura, la educación y la ciencia y tecnología; y también estimular la capacidad de expresión de la población a través de las diferentes formas de manifestación tales como las artes plásticas, la música, el arte escénico, las letras y las artes audiovisuales.
+
+Le compete, asimismo, sensibilizar a la población para crear una importante demanda y utilización de los servicios culturales;
+
+2) que la CND es una persona jurídica de Derecho Público no estatal creada por la Ley N° 15.785, de 23/12/1985, que entre otros cometidos, tiene los de: “ejercer como administrador y/o fiduciario de proyectos vinculados al desarrollo y mantenimiento de infraestructura financiados con recursos públicos, préstamos o donaciones nacionales o internacionales” (literal “B” del artículo 11 de la norma mencionada); “celebrar convenios con entidades públicas o privadas, a los efectos de la realización de obras de infraestructura o prestación de servicios asociados a estas” (literal “C” del artículo 11 de la Ley N° 15.785, en la redacción dada por el artículo 342 de la Ley N° 19.670, de 25/10/2018) y “prestar servicios fiduciarios y de administración de fondos, de recursos humanos o de administración contable y financiera, por cuenta de terceros” (literal “E” del artículo 11 de la Ley N° 15.785, en la redacción dada por el artículo 342 de la Ley N° 19.670);
+
+3) que la normativa habilita al MEC a celebrar convenios para el cumplimiento de sus cometidos y el proyecto de Convenio remitido puede realizarse en forma directa al amparo de la causal de excepción prevista en el literal D), numeral 1 del artículo 33 del TOCAF, atendiendo a la naturaleza jurídica de los entes intervinientes;
+
+4) que no obstante lo anterior y sin perjuicio de que el MEC -a través de su DNC- es el organismo que organiza el FIDAE 2024 - el convenio de cooperación proyectado no se adecua a los cometidos asignados por la normativa a la CND, dado que, si bien la causa del mismo es la organización del Festival Internacional de Artes Escénicas 2024 y administración de fondos - se establece que la CND realizará contrataciones según directivas recibidas del MEC, (Resultando N°4) lo que excede la competencia asignada por Ley;

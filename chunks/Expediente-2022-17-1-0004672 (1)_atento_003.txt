@@ -1,0 +1,21 @@
+=== METADATOS ===
+Archivo: extracted_text\Expediente-2022-17-1-0004672 (1).txt
+Sección: ATENTO
+Chunk: 3
+Palabras: 35
+Caracteres: 209
+Fecha: 2022-09-28
+Expediente: 2022-17-1-0004672.
+Entrada: 3773/2022.
+Fecha entrada: N/A
+Materia: Sin información
+Status: Observa
+
+=== CONTENIDO ===
+ATENTO: a lo precedentemente expuesto y a lo establecido por el artículo 211literal B) de la Constitución de la República;
+
+EL TRIBUNAL ACUERDA:
+
+1) Observar el gasto.
+
+2) Comunicar a la Intendencia de Rocha .

@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\2025-17-1-0001705-_BROU_reconsideración_curial_Silvia_Romero_levanta_obs.txt
+Sección: VISTO
+Chunk: 0
+Palabras: 43
+Caracteres: 275
+Fecha: 2025-08-26
+Expediente: 2025-17-1-0001705
+Entrada: 3157/2025
+Fecha entrada: N/A
+Materia: Sin información
+Status: Sin información
+
+=== CONTENIDO ===
+
+VISTO: las nuevas actuaciones remitidas por el Banco de la República Oriental del Uruguay (BROU) relacionadas con la contratación, en régimen de arrendamiento de servicios, de la Dra. Silvia Romero Bruno, como curial para patrocinar al Ente Autónomo en el Interior del país;

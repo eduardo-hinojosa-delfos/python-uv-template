@@ -1,0 +1,20 @@
+=== METADATOS ===
+Archivo: extracted_text\2024-17-1-0004839_BHU_CND_reiteración_mantiene_IB.txt
+Sección: CONSIDERANDO
+Chunk: 2
+Palabras: 124
+Caracteres: 773
+Fecha: 2024-12-31
+Expediente: 2024-17-1-0004839
+Entrada: 4867/2024
+Fecha entrada: N/A
+Materia: Sin información
+Status: Mantiene
+
+=== CONTENIDO ===
+
+CONSIDERANDO: 1) que el artículo 475 de la Ley N° 17.296, de 21/02/2001, establece que los Ordenadores de gastos o pagos, al ejercer la facultad de insistencia o reiteración que les acuerda el artículo 211 literal B) de la Constitución de la República, deben hacerlo en forma fundada, detallando los motivos que a su juicio justifican seguir el curso del gasto o pago;
+
+2)
+
+que los argumentos planteados por la Administración en la presente reiteración fueron previamente considerados por este Tribunal, el cual por mayoría, acordó observar el convenio a suscribirse, por lo que se mantienen incambiadas las causas y fundamentos por los que el Tribunal de Cuentas observó el gasto oportunamente, razón por la cual corresponde mantener la observación en todos sus términos;

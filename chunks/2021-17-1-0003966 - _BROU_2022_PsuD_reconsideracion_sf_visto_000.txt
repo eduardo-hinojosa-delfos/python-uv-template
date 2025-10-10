@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\2021-17-1-0003966 - _BROU_2022_PsuD_reconsideracion_sf.txt
+Sección: VISTO
+Chunk: 0
+Palabras: 51
+Caracteres: 352
+Fecha: 2022-02-03
+Expediente: 2021-17-1-
+Entrada: 4285/21
+Fecha entrada: N/A
+Materia: Reconsideración de Observaciones
+Status: Levantada
+
+=== CONTENIDO ===
+
+VISTO: los nuevos antecedentes remitidos por el Banco de la República Oriental del Uruguay (BROU), relacionados con la solicitud de reconsideración de la observación de las contrataciones de servicios profesionales para el asesoramiento y patrocino legal de curiales en las dependencias del interior del país, en régimen de arrendamiento de servicios;

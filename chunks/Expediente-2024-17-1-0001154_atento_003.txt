@@ -1,0 +1,21 @@
+=== METADATOS ===
+Archivo: extracted_text\Expediente-2024-17-1-0001154.txt
+Sección: ATENTO
+Chunk: 3
+Palabras: 55
+Caracteres: 343
+Fecha: 2024-03-20
+Expediente: 2024-17-1-0001154.
+Entrada: 1111/2024
+Fecha entrada: 2024-03-20
+Materia: Sin información
+Status: Mantiene
+
+=== CONTENIDO ===
+ATENTO: a lo dispuesto por el artículo 211 literal B) de la Constitución de la República;
+
+EL TRIBUNAL ACUERDA:
+
+1)  Una vez obtenida la conformidad del Ministerio de Transporte y Obras Públicas y confirmación de que el contrato se encuentra en ejecución, cometer al Contador delegado la intervención del gasto y;
+
+2) Devolver las actuaciones.

@@ -1,0 +1,21 @@
+=== METADATOS ===
+Archivo: extracted_text\2024-17-1-0002161_MEC_CND_Convenio_FIDAE__Observa_CND_.txt
+Sección: ATENTO
+Chunk: 3
+Palabras: 54
+Caracteres: 336
+Fecha: 2024-05-30
+Expediente: 2024-17-1-0002161
+Entrada: 2037/2024
+Fecha entrada: N/A
+Materia: Convenio
+Status: Observado
+
+=== CONTENIDO ===
+ATENTO: a lo expresado precedentemente y a lo dispuesto por los artículos 211 literales B) y E) y 228 de la Constitución de la República;
+
+EL TRIBUNAL ACUERDA:
+
+1) Observar el convenio a suscribirse entre el Ministerio de Educación y Cultura y la Corporación Nacional para el Desarrollo (Considerando N°4);
+
+2) Devolver las actuaciones.

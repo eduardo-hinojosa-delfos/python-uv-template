@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\2024-17-1-0004839_BHU_CND_reiteración_mantiene_IB.txt
+Sección: VISTO
+Chunk: 0
+Palabras: 52
+Caracteres: 345
+Fecha: 2024-12-31
+Expediente: 2024-17-1-0004839
+Entrada: 4867/2024
+Fecha entrada: N/A
+Materia: Sin información
+Status: Mantiene
+
+=== CONTENIDO ===
+
+VISTO: el Oficio N° 202/24 de 26/12/2024 remitido por Banco Hipotecario del Uruguay (BHU), mediante el cual comunica y adjunta la Resolución de Directorio N° 425/24 de fecha 26/12/2024, relacionada con la reiteración del compromiso asumido en el Convenio Marco de Colaboración a suscribirse con la Corporación Nacional para el Desarrollo (CND);

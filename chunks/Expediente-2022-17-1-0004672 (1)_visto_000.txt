@@ -1,0 +1,16 @@
+=== METADATOS ===
+Archivo: extracted_text\Expediente-2022-17-1-0004672 (1).txt
+Sección: VISTO
+Chunk: 0
+Palabras: 48
+Caracteres: 322
+Fecha: 2022-09-28
+Expediente: 2022-17-1-0004672.
+Entrada: 3773/2022.
+Fecha entrada: N/A
+Materia: Sin información
+Status: Observa
+
+=== CONTENIDO ===
+
+VISTO:  las  actuaciones  remitidas  por  la  Intendencia  de  Rocha, relacionadas con la contratación directa para proceder a la realización de las obras de pavimentación de calles en Complejo Mevir Velázquez, al amparo de la  causal  de  excepción  prevista  en  el  Art.  33,  literal  D)  numeral  11  del T.O.C.A.F.;

@@ -1,0 +1,34 @@
+=== METADATOS ===
+Archivo: extracted_text\2025-17-1-0001790_Convenio_de_cooperación-MA_con_CND_-_observada (1).txt
+Sección: CONSIDERANDO
+Chunk: 2
+Palabras: 561
+Caracteres: 3493
+Fecha: 2025-05-07
+Expediente: 2025-17-1-0001790.
+Entrada: 1724/2025
+Fecha entrada: N/A
+Materia: (literal “A”)
+Status: Observa
+
+=== CONTENIDO ===
+
+CONSIDERANDO: 1) que de conformidad con lo establecido por el artículo 292 de la Ley N° 19.889, de fecha 9 de julio de 2020, compete al Ministerio de Ambiente la ejecución de la política nacional ambiental, de ordenamiento ambiental, de desarrollo sostenible, de conservación y uso de los recursos naturales que fije el Poder Ejecutivo;
+
+2) que entre los cometidos sustanciales asignados a dicho Ministerio por el artículo 293 de la ley antes citada, compete al mismo la formulación, ejecución, supervisión y evaluación de los planes nacionales de protección del ambiente y de conservación y uso de los recursos naturales, así como la instrumentación de la política nacional en la materia (literal “A”); la coordinación con las demás entidades públicas, nacionales, departamentales y municipales, en la ejecución de sus cometidos (literal “B”); y celebrar convenios con personas públicas o privadas, nacionales o extranjeras para el cumplimiento de sus cometidos (literal “C”);
+
+3) que el artículo 11 de la Ley N° 15.785, de fecha 4 de diciembre de 1985, literal E) -en la redacción dada por el artículo 34 de la Ley N° 18.602, de fecha 21 de setiembre de 2009, por el artículo 345 de la Ley N° 18.996, de fecha 07 de setiembre de 2012, y el artículo 342 de la Ley N° 19.670, de fecha 15 octubre de 2018,- dispone que la Corporación Nacional para el Desarrollo, en su carácter de persona jurídica de derecho público no estatal, tiene -entre otros- el cometido de “prestar servicios fiduciarios y de administración de fondos, de recursos humanos o de administración contable y financiera, por cuenta de terceros”;
+
+4) que conforme a lo preceptuado en el numeral 1) del literal D) del artículo 33 del T.O.C.A.F., el Estado podrá contratar directamente o por el procedimiento que el ordenador determine, cualquiera sea el monto de la operación con personas públicas no estatales;
+
+5) que sin perjuicio de lo antedicho, el objeto del presente convenio específico a celebrarse entre las partes, no es claro en cuanto a su determinación, omitiendo describir de manera precisa o acotada la prestación de los servicios que se disponen (Resultando 1);
+
+6) que en consecuencia, no puede evaluarse si el convenio proyectado se adecua a los cometidos asignados por la normativa vigente al Ministerio de Ambiente;
+
+7)
+
+que específicamente, en relación a las contrataciones a realizarse por la Corporación Nacional para el Desarrollo y a la eventual provisión de servicios de consultoría o prestación de servicios con terceros (Resultando 2 y numeral vi del Resultando 3) -lo que también resulta indeterminado-, implicaría la trasferencia de fondos públicos para que la citada Corporación realice las contrataciones en el marco del Derecho Privado sin un objeto delimitado en el presente convenio, apartándose de la aplicación de las normas que regulan la contratación administrativa y los controles que la Constitución y la ley establecen para el uso de dichos fondos, en particular, el control externo que corresponde a este Tribunal;
+
+8) que en efecto, las normas para contratar previstas en el T.O.C.A.F., establecidas en los artículos 33 y siguientes, predominan por su especificad y naturaleza legal de orden público, sobre cualquier acuerdo o convenio, no siendo admisible que aquello que la Administración no puede hacer en forma directa pudiera hacerlo en forma indirecta;
+
+9) que en definitiva, existe una evasión a los procedimientos de contratación establecidos en el artículo 33 del T.O.C.A.F;

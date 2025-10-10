@@ -1,0 +1,25 @@
+=== METADATOS ===
+Archivo: extracted_text\2021-17-1-0003966 - _BROU_2022_PsuD_reconsideracion_sf.txt
+Sección: ATENTO
+Chunk: 3
+Palabras: 86
+Caracteres: 574
+Fecha: 2022-02-03
+Expediente: 2021-17-1-
+Entrada: 4285/21
+Fecha entrada: N/A
+Materia: Reconsideración de Observaciones
+Status: Levantada
+
+=== CONTENIDO ===
+ATENTO: a lo precedentemente expuesto;
+
+EL TRIBUNAL ACUERDA:
+
+1) Levantar la observación formulada por Resolución N° 2072/2021 de fecha 29 de setiembre de 2021.
+
+2) Cometer al Contador Delegado la intervención de los gastos que deriven de la contratación de los curiales, previo control de su imputación a grupo adecuado con disponibilidad suficiente, la verificación de la vigencia de los certificados de inscripción a la Dirección General Impositiva y en la Caja de Jubilaciones y Pensiones de Profesionales Universitarios.
+
+3) Comunicar al Contador Delegado.
+
+4) Oficiar.
