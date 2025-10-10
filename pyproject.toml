@@ -20,11 +20,49 @@ classifiers = [
 requires-python = ">=3.13"
 dependencies = [
     "pymupdf>=1.23.0",
+<<<<<<< HEAD
     "pathlib>=1.0.1",
+=======
+    # LangChain core + community splitters/loaders/vectorstores
+    "langchain>=0.2.0",
+    "langchain-core>=0.2.0",
+    "langchain-community>=0.2.0",
+    "langchain-text-splitters>=0.2.0",
+    # LangGraph (StateGraph, START, etc.)
+    "langgraph>=0.2.0",
+    # Embeddings (HuggingFace)
+    "langchain-huggingface>=0.1.0",
+    "sentence-transformers>=2.2.2",
+    "transformers>=4.44.0",
+    "torch>=2.1.0",
+    # OpenAI chat model via LangChain
+    "langchain-openai>=0.2.0",
+    "openai>=1.40.0",
+    # WebBaseLoader deps
+    "beautifulsoup4>=4.12.3",
+    "requests>=2.32.0",
+    "html5lib>=1.1",
+    # Hub (para hub.pull)
+    "langchainhub>=0.1.21",
+    # Tipos (lo usas en imports)
+    "typing-extensions>=4.12.2",
+    # (Opcional) Mantengo tus paquetes de LlamaIndex por compatibilidad con código previo
+    "llama-index>=0.10.0",
+    "llama-index-embeddings-huggingface>=0.2.0",
+    "chromadb>=1.1.1",
+    "python-dotenv>=1.1.1",
+>>>>>>> 5fa6284 (Separar ingest_index y qa_pipeline con vector_db persistente)
 ]
 
 [project.scripts]
 main = "python_uv_template.main:main"
+<<<<<<< HEAD
+=======
+main_langchain = "python_uv_template.main_langchain:main"
+ingest_index = "python_uv_template.ingest_index:main"
+qa_pipeline = "python_uv_template.qa_pipeline:main"
+
+>>>>>>> 5fa6284 (Separar ingest_index y qa_pipeline con vector_db persistente)
 
 [dependency-groups]
 dev = [
