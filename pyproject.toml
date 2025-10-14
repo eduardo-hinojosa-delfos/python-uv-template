@@ -50,14 +50,14 @@ dependencies = [
     "python-dotenv>=1.1.1",
     "Deprecated>=1.2.14",
     "langchain-chroma>=0.2.6",
+    "streamlit>=1.50.0",
 ]
 
 [project.scripts]
-main = "python_uv_template.main:main"
+main = "python_uv_template.main:run_streamlit"
 main_langchain = "python_uv_template.main_langchain:main"
 ingest_index = "python_uv_template.ingest_index:main"
 qa_pipeline = "python_uv_template.qa_pipeline:main"
-
 
 [dependency-groups]
 dev = [

@@ -1,5 +1,6 @@
 === METADATOS ===
-Archivo: extracted_text\2024-17-1-0004839_BHU_CND_reiteración_mantiene_IB.txt
+Archivo: extracted_text\Convenios\2024-17-1-0004839_BHU_CND_reiteración_mantiene_IB.txt
+Carpeta: Convenios
 Sección: ATENTO
 Chunk: 3
 Palabras: 55

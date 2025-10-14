@@ -1,5 +1,6 @@
 === METADATOS ===
-Archivo: extracted_text\2025-17-1-0001705-_BROU_reconsideración_curial_Silvia_Romero_levanta_obs.txt
+Archivo: extracted_text\Contratacion profesionales\2025-17-1-0001705-_BROU_reconsideración_curial_Silvia_Romero_levanta_obs.txt
+Carpeta: ContratacionProfesionales
 Sección: CONSIDERANDO
 Chunk: 2
 Palabras: 106

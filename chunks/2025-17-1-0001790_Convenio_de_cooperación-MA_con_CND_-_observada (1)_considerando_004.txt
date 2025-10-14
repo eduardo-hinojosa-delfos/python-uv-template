@@ -1,5 +1,6 @@
 === METADATOS ===
-Archivo: extracted_text\2025-17-1-0001790_Convenio_de_cooperación-MA_con_CND_-_observada (1).txt
+Archivo: extracted_text\Convenios\2025-17-1-0001790_Convenio_de_cooperación-MA_con_CND_-_observada (1).txt
+Carpeta: Convenios
 Sección: CONSIDERANDO
 Chunk: 4
 Palabras: 19

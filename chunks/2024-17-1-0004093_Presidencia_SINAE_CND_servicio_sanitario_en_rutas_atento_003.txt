@@ -1,5 +1,6 @@
 === METADATOS ===
-Archivo: extracted_text\2024-17-1-0004093_Presidencia_SINAE_CND_servicio_sanitario_en_rutas.txt
+Archivo: extracted_text\Convenios\2024-17-1-0004093_Presidencia_SINAE_CND_servicio_sanitario_en_rutas.txt
+Carpeta: Convenios
 Sección: ATENTO
 Chunk: 3
 Palabras: 164

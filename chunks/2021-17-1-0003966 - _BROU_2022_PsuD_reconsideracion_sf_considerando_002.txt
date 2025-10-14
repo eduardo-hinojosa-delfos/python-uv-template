@@ -1,5 +1,6 @@
 === METADATOS ===
-Archivo: extracted_text\2021-17-1-0003966 - _BROU_2022_PsuD_reconsideracion_sf.txt
+Archivo: extracted_text\Contratacion profesionales\2021-17-1-0003966 - _BROU_2022_PsuD_reconsideracion_sf.txt
+Carpeta: ContratacionProfesionales
 Sección: CONSIDERANDO
 Chunk: 2
 Palabras: 67

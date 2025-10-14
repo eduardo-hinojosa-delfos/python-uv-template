@@ -73,19 +73,20 @@ class PDFTextExtractor:
             combined_text,
         )
 
-        print(f"  → Texto extraído ({len(combined_text)} caracteres).")
-        return {"file": pdf_path.name, "text": combined_text, "chars": len(combined_text)}
+        rel_dir = str(pdf_path.relative_to(self.pdf_folder).parent)
+        return {"file": pdf_path.name, "text": combined_text, "chars": len(combined_text), "rel_dir": rel_dir}
 
-    def save_text(self, file_name: str, text: str) -> None:
-        """Guarda el texto extraído en formato .txt con codificación UTF-8."""
-        txt_path = self.output_folder / f"{Path(file_name).stem}.txt"
+    def save_text(self, file_name: str, text: str, rel_dir: str = "") -> None:
+        out_dir = (self.output_folder / rel_dir) if rel_dir else self.output_folder
+        out_dir.mkdir(parents=True, exist_ok=True)
+        txt_path = out_dir / f"{Path(file_name).stem}.txt"
         with open(txt_path, "w", encoding="utf-8") as f:
             f.write(text)
         print(f"  Archivo guardado en {txt_path}")
 
     def process_all_pdfs(self) -> List[Dict[str, Any]]:
         """Procesa todos los archivos PDF disponibles en el directorio y devuelve el resumen de extracción."""
-        pdf_files = list(self.pdf_folder.glob("*.pdf"))
+        pdf_files = list(self.pdf_folder.rglob("*.pdf"))
         if not pdf_files:
             print("No se encontraron archivos PDF en el directorio especificado.")
             return []
@@ -93,10 +94,9 @@ class PDFTextExtractor:
         results: List[Dict[str, Any]] = []
         for pdf in pdf_files:
             data = self.extract_text_from_pdf(pdf)
-            self.save_text(data["file"], data["text"])
+            self.save_text(data["file"], data["text"], data.get("rel_dir", ""))
             results.append(data)
         return results
-
 
 def process_pdfs(pdf_folder: str = "pdf_documents", output_folder: str = "extracted_text") -> List[Dict[str, Any]]:
     """Función auxiliar para ejecutar la extracción completa de texto desde un conjunto de PDFs."""

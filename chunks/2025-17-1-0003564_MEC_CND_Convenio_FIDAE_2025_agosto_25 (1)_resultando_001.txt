@@ -1,5 +1,6 @@
 === METADATOS ===
-Archivo: extracted_text\2025-17-1-0003564_MEC_CND_Convenio_FIDAE_2025_agosto_25 (1).txt
+Archivo: extracted_text\Convenios\2025-17-1-0003564_MEC_CND_Convenio_FIDAE_2025_agosto_25 (1).txt
+Carpeta: Convenios
 Sección: RESULTANDO
 Chunk: 1
 Palabras: 773

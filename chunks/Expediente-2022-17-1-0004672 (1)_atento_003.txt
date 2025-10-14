@@ -1,5 +1,6 @@
 === METADATOS ===
-Archivo: extracted_text\Expediente-2022-17-1-0004672 (1).txt
+Archivo: extracted_text\Otros\Expediente-2022-17-1-0004672 (1).txt
+Carpeta: Otros
 Sección: ATENTO
 Chunk: 3
 Palabras: 35

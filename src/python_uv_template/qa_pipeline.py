@@ -74,7 +74,9 @@ def main() -> None:
     prompt = build_prompt()
 
     def retrieve(state: State):
-        docs = vdb.similarity_search(state["question"], k=3)
+        folder = (os.getenv("RAG_SOURCE_DIR") or "").strip()
+        mf = {"source_dir": {"$eq": folder}} if folder else None
+        docs = vdb.similarity_search(state["question"], k=3, metadata_filter=mf)
         return {"context": docs}
 
     def generate(state: State):
@@ -86,7 +88,8 @@ def main() -> None:
             f"Materia: {doc.metadata.get('materia','')}\n"
             f"Status: {doc.metadata.get('status','')}\n"
             f"Archivo: {doc.metadata.get('source_file','')}\n"
-            f"Sección: {doc.metadata.get('section','')}\n\n"
+            f"Sección: {doc.metadata.get('section','')}\n"
+            f"Carpeta: {doc.metadata.get('source_dir','')}\n\n"
             f"[CONTENIDO]\n{doc.page_content}"
             for doc in state["context"]
         )
@@ -98,7 +101,8 @@ def main() -> None:
             f"Sección: {doc.metadata.get('section','')} | "
             f"Fecha: {doc.metadata.get('date','')} | "
             f"Materia: {doc.metadata.get('materia','')} | "
-            f"Status: {doc.metadata.get('status','')}"
+            f"Status: {doc.metadata.get('status','')} | "
+            f"Carpeta: {doc.metadata.get('source_dir','')}"
             for doc in state["context"]
         )
         return {"answer": response.content.strip(), "references": refs}

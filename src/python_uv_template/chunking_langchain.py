@@ -347,6 +347,13 @@ Respuesta:
         documents: List[Document] = []
         running_idx = 0
 
+        try:
+            from pathlib import Path as _P
+            raw_dir = _P(file_name).parent.name or ""
+            source_dir = "".join(word.capitalize() for word in re.split(r"\s+", raw_dir.strip()))
+        except Exception:
+            source_dir = ""
+
         for section in sections:
             section_text = section["text"]
             if section["name"].upper() == "ATENTO":
@@ -358,6 +365,7 @@ Respuesta:
                     md = {
                         "section": section["name"],
                         "source_file": file_name,
+                        "source_dir": source_dir,
                         "chunk_index": running_idx,
                         "word_count": len(d.page_content.split()),
                         "char_count": len(d.page_content),
@@ -374,6 +382,7 @@ Respuesta:
                 md = {
                     "section": section["name"],
                     "source_file": file_name,
+                    "source_dir": source_dir,
                     "chunk_index": running_idx,
                     "word_count": len(section_text.split()),
                     "char_count": len(section_text),
@@ -404,6 +413,7 @@ Respuesta:
             with open(out_file, "w", encoding="utf-8") as f:
                 f.write("=== METADATOS ===\n")
                 f.write(f"Archivo: {doc.metadata.get('source_file','')}\n")
+                f.write(f"Carpeta: {doc.metadata.get('source_dir','')}\n")
                 f.write(f"Sección: {doc.metadata.get('section','')}\n")
                 f.write(f"Chunk: {idx}\n")
                 f.write(f"Palabras: {doc.metadata.get('word_count',0)}\n")
@@ -427,7 +437,7 @@ Respuesta:
     ) -> List[Document]:
         """Ejecuta el pipeline completo sobre una carpeta de .txt y devuelve la lista de documentos."""
         txt_path = Path(txt_folder)
-        txt_files = sorted(list(txt_path.glob("*.txt")))
+        txt_files = sorted(list(txt_path.rglob("*.txt")))
 
         if not txt_files:
             print("No se encontraron archivos .txt para chunking.")

@@ -1,5 +1,6 @@
 === METADATOS ===
-Archivo: extracted_text\2024-17-1-0002161_MEC_CND_Convenio_FIDAE__Observa_CND_.txt
+Archivo: extracted_text\Convenios\2024-17-1-0002161_MEC_CND_Convenio_FIDAE__Observa_CND_.txt
+Carpeta: Convenios
 Sección: RESULTANDO
 Chunk: 1
 Palabras: 884

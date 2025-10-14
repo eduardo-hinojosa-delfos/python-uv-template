@@ -1,5 +1,6 @@
 === METADATOS ===
-Archivo: extracted_text\2024-17-1-0003968_MRREE_reconsideración_convenio_CND____25.txt
+Archivo: extracted_text\Convenios\2024-17-1-0003968_MRREE_reconsideración_convenio_CND____25.txt
+Carpeta: Convenios
 Sección: CONSIDERANDO
 Chunk: 2
 Palabras: 200
@@ -9,7 +10,7 @@ Expediente: 2024-17-1-0003968
 Entrada: 0601/2025
 Fecha entrada: N/A
 Materia: Sin información
-Status: Mantiene
+Status: Observa
 
 === CONTENIDO ===
 

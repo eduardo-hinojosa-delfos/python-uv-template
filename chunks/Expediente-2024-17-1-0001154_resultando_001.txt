@@ -1,5 +1,6 @@
 === METADATOS ===
-Archivo: extracted_text\Expediente-2024-17-1-0001154.txt
+Archivo: extracted_text\Otros\Expediente-2024-17-1-0001154.txt
+Carpeta: Otros
 Sección: RESULTANDO
 Chunk: 1
 Palabras: 228
