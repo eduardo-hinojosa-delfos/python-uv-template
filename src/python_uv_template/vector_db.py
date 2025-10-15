@@ -8,7 +8,8 @@ from __future__ import annotations
 
 import re
 import unicodedata
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence, Tuple
+from math import sqrt
 
 from langchain_core.documents import Document
 from langchain_chroma import Chroma
@@ -106,6 +107,21 @@ class ChromaVectorDB:
         _ = self.store._collection  # fuerza inicialización
 
     # ------- Búsqueda -------
+    def _cosine_distance(a: Sequence[float], b: Sequence[float]) -> float:
+        """Distancia coseno = 1 - cos_sim(a, b)."""
+        dot = 0.0
+        na = 0.0
+        nb = 0.0
+        for x, y in zip(a, b):
+            dot += x * y
+            na += x * x
+            nb += y * y
+        if na == 0.0 or nb == 0.0:
+            # Si alguna norma es 0, no se puede definir coseno; devolvemos distancia neutra 1.0
+            return 1.0
+        return 1.0 - (dot / (sqrt(na) * sqrt(nb)))
+
+
     def similarity_search(
         self,
         query: str,
@@ -133,3 +149,112 @@ class ChromaVectorDB:
         if metadata_filter:
             search_kwargs["filter"] = metadata_filter
         return self.store.as_retriever(search_kwargs=search_kwargs)
+    
+    def similarity_search_with_score(
+        self,
+        query: str,
+        k: int = 3,
+        metadata_filter: Optional[Dict[str, Any]] = None,
+    ) -> List[Tuple[Document, float]]:
+        """
+        Igual que similarity_search pero devuelve (Document, score).
+        El score es la distancia nativa que reporta Chroma (típicamente cosine distance: menor es mejor).
+        """
+        # 1) Si el wrapper de LangChain ya lo trae, úsalo.
+        try:
+            return self.store.similarity_search_with_score(query, k=k, filter=metadata_filter)
+        except AttributeError:
+            pass  # caemos al plan B
+
+        # 2) Plan B: llamar a la colección nativa de Chroma y armar los Documents + distancias.
+        coll = getattr(self.store, "_collection", None)
+        if coll is None:
+            # Fallback extremo: sin distancias (compatibilidad)
+            docs = self.store.similarity_search(query, k=k, filter=metadata_filter)
+            return [(d, None) for d in docs]  # type: ignore[list-item]
+
+        res = coll.query(
+            query_texts=[query],
+            n_results=k,
+            where=metadata_filter or {},
+            include=["documents", "metadatas", "distances", "ids"],
+        )
+        # res["documents"], res["metadatas"], res["distances"] son listas por query (aquí 1).
+        docs_out: List[Tuple[Document, float]] = []
+        docs_list = (res.get("documents") or [[]])[0]
+        metas_list = (res.get("metadatas") or [[]])[0]
+        dists_list = (res.get("distances") or [[]])[0]
+
+        for txt, md, dist in zip(docs_list, metas_list, dists_list):
+            # md ya viene saneado de indexación
+            doc = Document(page_content=txt or "", metadata=dict(md or {}))
+            docs_out.append((doc, float(dist)))
+        return docs_out
+
+    def mmr_search_with_score(
+        self,
+        query: str,
+        k: int = 5,
+        fetch_k: int = 20,
+        metadata_filter: Optional[Dict[str, Any]] = None,
+    ) -> List[Tuple[Document, float]]:
+        """
+        Selecciona documentos con MMR (diversidad) y devuelve (Document, score).
+        El score se calcula como distancia coseno entre el embedding de query y el embedding del documento
+        (usando primero embeddings almacenados en Chroma; si no están, se recalculan).
+        """
+        # 1) Selección MMR usando el wrapper (no devuelve score).
+        docs = self.store.max_marginal_relevance_search(
+            query, k=k, fetch_k=fetch_k, filter=metadata_filter
+        )
+        if not docs:
+            return []
+
+        # 2) Embedding del query
+        q_vec = self._embeddings.embed_query(query)
+
+        # 3) Intentar recuperar embeddings de los docs seleccionados desde la colección
+        coll = getattr(self.store, "_collection", None)
+        out: List[Tuple[Document, float]] = []
+
+        # Construimos lista de IDs si vienen en metadata
+        ids: List[str] = []
+        for d in docs:
+            mid = (d.metadata or {}).get("id")
+            if isinstance(mid, str) and mid:
+                ids.append(mid)
+            else:
+                ids.append("")  # placeholder para mantener el índice
+
+        doc_embeds_by_id: Dict[str, List[float]] = {}
+        if coll and any(ids):
+            # Filtrar vacíos
+            ids_to_fetch = [i for i in ids if i]
+            if ids_to_fetch:
+                try:
+                    got = coll.get(ids=ids_to_fetch, include=["embeddings"])
+                    # got["ids"] -> lista en el mismo orden que embeddings
+                    for gid, gemb in zip(got.get("ids", []), got.get("embeddings", [])):
+                        if gid and gemb:
+                            doc_embeds_by_id[str(gid)] = list(map(float, gemb))
+                except Exception:
+                    # Si falla, seguimos con recálculo
+                    pass
+
+        # 4) Para cada doc: usar embedding almacenado si está; si no, recalcular.
+        for d, doc_id in zip(docs, ids):
+            emb: Optional[List[float]] = None
+            if doc_id and doc_id in doc_embeds_by_id:
+                emb = doc_embeds_by_id[doc_id]
+            else:
+                # Recalcular embedding del contenido como fallback
+                try:
+                    emb_list = self._embeddings.embed_documents([d.page_content or ""])
+                    emb = list(map(float, emb_list[0])) if emb_list else None
+                except Exception:
+                    emb = None
+            # 5) Distancia coseno (si no podemos calcular, devolver None)
+            score = _cosine_distance(q_vec, emb) if emb else None  # type: ignore[arg-type]
+            out.append((d, score if score is not None else 1.0))
+
+        return out

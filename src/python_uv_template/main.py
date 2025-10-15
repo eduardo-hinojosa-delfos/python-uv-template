@@ -42,22 +42,43 @@ def app():
 
     @lru_cache(maxsize=1)
     def build_enrichment_prompt() -> PromptTemplate:
-        """Devuelve el prompt para que el LLM extraiga/expanda filtros y consulta."""
+        """Devuelve el prompt para que el LLM extraiga/expanda filtros y consulta.
+        NOTA: Las llaves del JSON se escapan con {{ }} para que .format() no las trate como placeholders.
+        """
         return PromptTemplate(
             input_variables=["question"],
             template=(
-                "Eres un agente de jurisprudencia experto en documentos legales.\n"
-                "Objetivo: Expande/extrae filtros útiles para recuperar evidencia correcta.\n\n"
-                "Devuelve SOLO un JSON con esta estructura EXACTA:\n"
-                "{\n"
+                "Tu rol es el de un Analista Legal especializado en estructuras jurisprudenciales.\n"
+                "Tu tarea es orientar la recuperación de evidencia **dentro de las secciones formales** de resoluciones/jurisprudencias, "
+                "limitándote únicamente a estas cuatro secciones:\n\n"
+                "1) VISTO → Origen del expediente/asunto; identificación del caso, entidad/persona involucrada y materia del reclamo/solicitud.\n"
+                "2) RESULTANDO → Hechos y antecedentes, cronología de actuaciones, resoluciones previas y fundamentos fácticos.\n"
+                "3) CONSIDERANDO → Fundamentos jurídicos y análisis normativo; razones de derecho e interpretación de normas.\n"
+                "4) ATENTO → Enumeración de normas legales y fundamentos normativos que soportan la resolución; puente hacia la decisión final.\n\n"
+                "Comportamiento esperado:\n"
+                "- Si la pregunta del usuario **corresponde claramente** a alguna de esas secciones, identifica cuál.\n"
+                "- Si **no corresponde explícitamente** a esas secciones (p.ej., decisión final como RESUELVE/DICTAMINA), deja la sección vacía.\n"
+                "- No inventes contenido jurídico ni emitas juicios legales: tu función es orientar la ubicación estructural.\n\n"
+                "Devuelve SOLO un JSON con esta estructura EXACTA (sin texto extra):\n"
+                "{{\n"
                 '  "expanded_query": "pregunta reescrita",\n'
                 '  "keywords": ["k1","k2"],\n'
                 '  "entities": ["entidad1","entidad2"],\n'
-                '  "filters": { "materia": "", "status": "", "date": "", "expediente": "", "carpeta": ""}\n'
-                "}\n"
-                "- `filters.date` en ISO: YYYY, YYYY-MM o YYYY-MM-DD.\n"
-                "- Si no hay valor, usar vacío.\n\n"
-                "Pregunta:\n{question}\n"
+                '  "filters": {{\n'
+                '    "materia": "",\n'
+                '    "status": "",\n'
+                '    "date": "",\n'
+                '    "expediente": "",\n'
+                '    "carpeta": "",\n'
+                '    "seccion": ""\n'
+                "  }}\n"
+                "}}\n\n"
+                "Instrucciones para `filters.seccion`:\n"
+                "- Usa SOLO uno de estos valores canónicos: \"VISTO\", \"RESULTANDO\", \"CONSIDERANDO\", \"ATENTO\".\n"
+                "- Si no aplica o no es claro, usa cadena vacía \"\".\n"
+                "- `filters.date` en ISO (YYYY, YYYY-MM o YYYY-MM-DD). Si no hay valor, usar vacío.\n\n"
+                "Pregunta del usuario:\n"
+                "{question}\n"
             ),
         )
 
@@ -78,11 +99,15 @@ def app():
             clauses.append({"expediente": {"$eq": str(md["expediente"]).strip()}})
         if md.get("source_dir"):
             clauses.append({"source_dir": {"$eq": str(md["source_dir"]).strip()}})
+        # NUEVO: sección
+        if md.get("section"):
+            clauses.append({"section": {"$eq": str(md["section"]).strip()}})
         if not clauses:
             return None
         if len(clauses) == 1:
             return clauses[0]
         return {"$and": clauses}
+
 
     def build_date_predicate(date_filter_str: str):
         """Crea un predicado para filtrar localmente por fecha (YYYY|YYYY-MM|YYYY-MM-DD)."""
@@ -154,6 +179,28 @@ def app():
         t = (text or "").strip().replace("\r\n", "\n")
         return t if len(t) <= n else t[:n] + "…"
 
+    def _norm_section(val: str) -> str:
+        """Normaliza 'sección' a una de: VISTO, RESULTANDO, CONSIDERANDO, ATENTO."""
+        if not val:
+            return ""
+        # Si ya viene en forma canónica, respétala
+        if val in ("VISTO", "RESULTANDO", "CONSIDERANDO", "ATENTO"):
+            return val
+
+        key = (val or "").strip().lower()
+        mapping = {
+            "visto": "VISTO",
+            "vistos": "VISTO",
+            "resultando": "RESULTANDO",
+            "resultandos": "RESULTANDO",
+            "considerando": "CONSIDERANDO",
+            "considerandos": "CONSIDERANDO",
+            "atento": "ATENTO",
+            "atentos": "ATENTO",
+        }
+        # Si no mapea, devuelve el valor original para no sobre-filtrar por error
+        return mapping.get(key, val)
+
     def _norm_status(val: str) -> str:
         """Normaliza variantes de ‘status’ a valores canónicos del índice."""
         mapping = {
@@ -182,6 +229,9 @@ def app():
             md["expediente"] = str(filt["expediente"]).strip()
         if filt.get("carpeta"):
             md["source_dir"] = str(filt["carpeta"]).strip()
+        # NUEVO: sección → metadato 'section'
+        if filt.get("seccion"):
+            md["section"] = _norm_section(str(filt["seccion"]))
         return md
 
     @st.cache_resource(show_spinner=False)
@@ -217,12 +267,14 @@ def app():
         chroma_dir = st.text_input("Chroma dir", value=DEFAULT_CHROMA_DIR)
         embeddings_model = st.text_input("Embeddings HF", value=DEFAULT_EMBEDDINGS)
         llm_model = st.text_input("LLM (OpenAI)", value=DEFAULT_LLM_MODEL)
-        top_k = st.slider("k documentos", min_value=1, max_value=5, value=1, step=1)
+        top_k = st.slider("k documentos", min_value=1, max_value=57, value=57, step=1)
         use_mmr = st.toggle("Usar MMR", value=False)
+        enrich_enabled = st.toggle("Usar enriquecimiento de pregunta", value=True)
         show_debug = st.toggle("Depuración", value=False)
         if st.button("Limpiar historial"):
             st.session_state.pop("history", None)
             st.rerun()
+        
 
     with st.spinner("Inicializando…"):
         if not os.environ.get("OPENAI_API_KEY"):
@@ -268,7 +320,7 @@ def app():
         keywords = data.get("keywords") if isinstance(data.get("keywords"), list) else []
         entities = data.get("entities") if isinstance(data.get("entities"), list) else []
         filters = data.get("filters") if isinstance(data.get("filters"), dict) else {
-            "materia": "", "status": "", "date": "", "expediente": ""
+            "materia": "", "status": "", "date": "", "expediente": "", "carpeta": "", "seccion": ""
         }
         parts = [expanded or q]
         if keywords:
@@ -291,50 +343,110 @@ def app():
             "chroma_where": chroma_where,
         }
 
-    def answer_once(q: str, k: int):
-        """Ejecuta un ciclo de pregunta: enrich → retrieve (con filtro) → generar → guardar en historial."""
-        enriched = enrich_question(q)
-        final_q = enriched["final_query"]
-        md_filter = enriched["metadata_filter"]
-        chroma_where = build_chroma_where(md_filter)
+    def answer_once(q: str, k: int, enrich_enabled: bool = True):
+        """
+        Ejecuta un ciclo de pregunta: (opcional) enrich → retrieve (con filtro) → generar → guardar en historial.
+        Si el enriquecimiento falla o está desactivado, hace retrieval directo con la pregunta original.
+        """
+        # --- 0) Enriquecimiento con fallback ---
+        try:
+            if enrich_enabled:
+                enriched = enrich_question(q)  # puede lanzar si el JSON no fue válido, etc.
+            else:
+                raise RuntimeError("enrichment_disabled")
+            final_q = enriched["final_query"]
+            md_filter = enriched["metadata_filter"]
+            chroma_where = build_chroma_where(md_filter)
+            enriched_data = enriched["data"]
+        except Exception as _e:
+            # Fallback: sin enriquecimiento ni filtros (evita que falle toda la app)
+            final_q = q
+            md_filter = {}
+            chroma_where = None
+            enriched_data = {
+                        "expanded_query": q,
+                        "keywords": [],
+                        "entities": [],
+                        "filters": {"materia": "", "status": "", "date": "", "expediente": "", "carpeta": "", "seccion": ""},
+                        "_raw": "(sin enriquecimiento: fallback)",
+                    }
+
+
+        # --- 1) Heurística de overfetching: trae más candidatos de los que mostrarás ---
+        # Motivo: después filtrarás por fecha y recortarás a k; esto mejora el recall.
         fetch_more = max(k * 5, 20)
+
+        # --- 2) Retrieval con score si es posible; fallback sin score ---
+        candidates_pairs: List[tuple] = []
+
         if use_mmr:
-            candidates = vdb.mmr_search(
-                final_q,
-                k=fetch_more,
-                fetch_k=max(fetch_more * 2, 40),
-                metadata_filter=chroma_where or None,
-            )
+            # MMR: selecciona diversidad; usa un pool mayor (fetch_k) para que tenga de dónde escoger.
+            try:
+                candidates_pairs = vdb.mmr_search_with_score(
+                    final_q,
+                    k=fetch_more,
+                    fetch_k=max(fetch_more * 2, 40),
+                    metadata_filter=chroma_where or None,
+                )
+            except AttributeError:
+                _docs = vdb.mmr_search(
+                    final_q,
+                    k=fetch_more,
+                    fetch_k=max(fetch_more * 2, 40),
+                    metadata_filter=chroma_where or None,
+                )
+                candidates_pairs = [(d, None) for d in _docs]
         else:
-            candidates = vdb.similarity_search(
-                final_q, k=fetch_more, metadata_filter=chroma_where or None
-            )
+            # Similarity: intenta devolver pares (doc, distancia); menor = mejor.
+            try:
+                candidates_pairs = vdb.similarity_search_with_score(
+                    final_q, k=fetch_more, metadata_filter=chroma_where or None
+                )
+            except AttributeError:
+                _docs = vdb.similarity_search(
+                    final_q, k=fetch_more, metadata_filter=chroma_where or None
+                )
+                candidates_pairs = [(d, None) for d in _docs]
+
+        # --- 3) Filtro local por fecha (YYYY|YYYY-MM|YYYY-MM-DD) ---
         date_pred = build_date_predicate(md_filter.get("date", ""))
-        filtered = [d for d in candidates if date_pred((d.metadata or {}).get("date", ""))]
-        docs = (filtered[:k] if filtered else candidates[:k])
+        filtered_pairs = [
+            (d, s) for (d, s) in candidates_pairs
+            if date_pred((d.metadata or {}).get("date", ""))
+        ]
+
+        # --- 4) Selección final de k y construcción del contexto para el LLM ---
+        docs_with_scores = (filtered_pairs[:k] if filtered_pairs else candidates_pairs[:k])
+        docs = [d for (d, _) in docs_with_scores]
         ctx = format_docs_for_prompt(docs)
+
+        # --- 5) LLM: generar respuesta usando SOLO el contexto recuperado ---
         msg = gen_prompt.format(question=q, context=ctx)
         resp = llm.invoke(msg)
         ans = (resp.content or "").strip()
+
+        # --- 6) Guardar todo en historial (incluye scores y trazas útiles de depuración) ---
         st.session_state["history"].insert(
             0,
             {
                 "q": q,
                 "a": ans,
-                "docs": docs,
-                "enriched": enriched["data"],
+                "docs": docs,                       # compat con renders previos
+                "docs_with_scores": docs_with_scores,
+                "enriched": enriched_data,          # muestra si usaste fallback
                 "filter": md_filter,
                 "where": chroma_where,
                 "final_query": final_q,
             },
         )
 
+
     if user_question:
         with st.chat_message("user"):
             st.markdown(user_question)
         with st.chat_message("assistant"):
             with st.spinner("Buscando y redactando…"):
-                answer_once(user_question, k=top_k)
+                answer_once(user_question, k=top_k, enrich_enabled=enrich_enabled )
 
     for turn in st.session_state["history"]:
         with st.chat_message("user"):
@@ -342,9 +454,18 @@ def app():
         with st.chat_message("assistant"):
             st.markdown(turn["a"])
             with st.expander("📎 Documentos utilizados (ver)"):
-                for i, d in enumerate(turn["docs"], start=1):
+                st.caption("El ‘score’ mostrado es el valor nativo que retorna Chroma (típicamente una distancia: menor es mejor).")
+                docs_with_scores = turn.get("docs_with_scores")  # lista de (Document, score)
+                if docs_with_scores is None:
+                    # Compatibilidad: si no existe, reconstruimos pairs con score=None
+                    docs_with_scores = [(d, None) for d in turn.get("docs", [])]
+
+                for i, (d, sc) in enumerate(docs_with_scores, start=1):
                     md = d.metadata or {}
-                    st.markdown(f"**{i}. {md.get('source_file','(sin nombre)')} — {md.get('section','')}**")
+                    score_txt = "—" if sc is None else f"{sc:.4f}"
+                    title = md.get('source_file','(sin nombre)')
+                    section = md.get('section','')
+                    st.markdown(f"**{i}. {title} — {section}**  \nScore (Chroma): `{score_txt}`")
                     st.caption(
                         f"Fecha: {md.get('date','')} • Expediente: {md.get('expediente','')} • "
                         f"Entrada: {md.get('entrada','')} • Materia: {md.get('materia','')} • "
@@ -384,6 +505,11 @@ def app():
                     st.json(turn.get("filter", {}))
                     st.write("**JSON crudo de enriquecimiento (LLM):**")
                     st.json(turn.get("enriched", {}))
+                    # Mostrar primeros scores si existen
+                    dws = turn.get("docs_with_scores") or []
+                    if dws:
+                        st.write("**Scores (primeros 5):**")
+                        st.table([{"archivo": (x[0].metadata or {}).get("source_file",""), "score": x[1]} for x in dws[:5]])
 
 if __name__ == "__main__":
     app()
