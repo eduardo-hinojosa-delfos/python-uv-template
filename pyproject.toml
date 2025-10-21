@@ -21,7 +21,7 @@ requires-python = ">=3.10,<3.13"
 dependencies = [
     "pymupdf>=1.23.0",
     # LangChain core + community splitters/loaders/vectorstores
-    "langchain>=0.2.0",
+    "langchain>=0.2.16",
     "langchain-core>=0.2.0",
     "langchain-community>=0.2.0",
     "langchain-text-splitters>=0.2.0",
@@ -51,6 +51,7 @@ dependencies = [
     "Deprecated>=1.2.14",
     "langchain-chroma>=0.2.6",
     "streamlit>=1.50.0",
+    "langsmith~=0.1",
 ]
 
 [project.scripts]

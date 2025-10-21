@@ -345,100 +345,161 @@ def app():
 
     def answer_once(q: str, k: int, enrich_enabled: bool = True):
         """
-        Ejecuta un ciclo de pregunta: (opcional) enrich → retrieve (con filtro) → generar → guardar en historial.
-        Si el enriquecimiento falla o está desactivado, hace retrieval directo con la pregunta original.
+        Ejecuta un turno completo usando rag_infer y guarda el resultado en el historial de Streamlit.
+        Reemplaza tu versión anterior de answer_once con esta.
         """
-        # --- 0) Enriquecimiento con fallback ---
-        try:
-            if enrich_enabled:
-                enriched = enrich_question(q)  # puede lanzar si el JSON no fue válido, etc.
-            else:
-                raise RuntimeError("enrichment_disabled")
-            final_q = enriched["final_query"]
-            md_filter = enriched["metadata_filter"]
-            chroma_where = build_chroma_where(md_filter)
-            enriched_data = enriched["data"]
-        except Exception as _e:
-            # Fallback: sin enriquecimiento ni filtros (evita que falle toda la app)
-            final_q = q
-            md_filter = {}
-            chroma_where = None
-            enriched_data = {
-                        "expanded_query": q,
-                        "keywords": [],
-                        "entities": [],
-                        "filters": {"materia": "", "status": "", "date": "", "expediente": "", "carpeta": "", "seccion": ""},
-                        "_raw": "(sin enriquecimiento: fallback)",
-                    }
+        run = rag_infer(
+            q,
+            k=k,
+            enrich_enabled=enrich_enabled,
+            use_mmr=use_mmr,                 # usa el toggle de la UI
+            vdb=vdb,
+            llm=llm,
+            enrich_prompt=enrich_prompt,
+            gen_prompt=gen_prompt,
+        )
 
+        ans = run["answer"]
+        docs_with_scores = run["docs_with_scores"]
 
-        # --- 1) Heurística de overfetching: trae más candidatos de los que mostrarás ---
-        # Motivo: después filtrarás por fecha y recortarás a k; esto mejora el recall.
-        fetch_more = max(k * 5, 20)
-
-        # --- 2) Retrieval con score si es posible; fallback sin score ---
-        candidates_pairs: List[tuple] = []
-
-        if use_mmr:
-            # MMR: selecciona diversidad; usa un pool mayor (fetch_k) para que tenga de dónde escoger.
-            try:
-                candidates_pairs = vdb.mmr_search_with_score(
-                    final_q,
-                    k=fetch_more,
-                    fetch_k=max(fetch_more * 2, 40),
-                    metadata_filter=chroma_where or None,
-                )
-            except AttributeError:
-                _docs = vdb.mmr_search(
-                    final_q,
-                    k=fetch_more,
-                    fetch_k=max(fetch_more * 2, 40),
-                    metadata_filter=chroma_where or None,
-                )
-                candidates_pairs = [(d, None) for d in _docs]
-        else:
-            # Similarity: intenta devolver pares (doc, distancia); menor = mejor.
-            try:
-                candidates_pairs = vdb.similarity_search_with_score(
-                    final_q, k=fetch_more, metadata_filter=chroma_where or None
-                )
-            except AttributeError:
-                _docs = vdb.similarity_search(
-                    final_q, k=fetch_more, metadata_filter=chroma_where or None
-                )
-                candidates_pairs = [(d, None) for d in _docs]
-
-        # --- 3) Filtro local por fecha (YYYY|YYYY-MM|YYYY-MM-DD) ---
-        date_pred = build_date_predicate(md_filter.get("date", ""))
-        filtered_pairs = [
-            (d, s) for (d, s) in candidates_pairs
-            if date_pred((d.metadata or {}).get("date", ""))
-        ]
-
-        # --- 4) Selección final de k y construcción del contexto para el LLM ---
-        docs_with_scores = (filtered_pairs[:k] if filtered_pairs else candidates_pairs[:k])
-        docs = [d for (d, _) in docs_with_scores]
-        ctx = format_docs_for_prompt(docs)
-
-        # --- 5) LLM: generar respuesta usando SOLO el contexto recuperado ---
-        msg = gen_prompt.format(question=q, context=ctx)
-        resp = llm.invoke(msg)
-        ans = (resp.content or "").strip()
-
-        # --- 6) Guardar todo en historial (incluye scores y trazas útiles de depuración) ---
         st.session_state["history"].insert(
             0,
             {
                 "q": q,
                 "a": ans,
-                "docs": docs,                       # compat con renders previos
+                "docs": [d for (d, _) in docs_with_scores],
                 "docs_with_scores": docs_with_scores,
-                "enriched": enriched_data,          # muestra si usaste fallback
-                "filter": md_filter,
-                "where": chroma_where,
-                "final_query": final_q,
+                "enriched": run["enriched"],
+                "filter": run["filter"],
+                "where": run["where"],
+                "final_query": run["final_query"],
             },
         )
+
+
+
+    def rag_infer(
+        question: str,
+        *,
+        k: int,
+        enrich_enabled: bool,
+        use_mmr: bool,
+        vdb,
+        llm,
+        enrich_prompt,
+        gen_prompt,
+    ):
+        """
+        Ejecuta el pipeline de RAG y retorna un dict estructurado SIN tocar Streamlit.
+        Retorna:
+        {
+            "answer": str,
+            "docs_with_scores": List[Tuple[Document, Optional[float]]],
+            "final_query": str,
+            "filter": Dict[str, Any],
+            "where": Optional[Dict[str, Any]],
+            "enriched": Dict[str, Any],
+        }
+        """
+        import json as _json
+
+        # --- Enriquecimiento (con fallback robusto) ---
+        try:
+            if enrich_enabled:
+                raw_text = llm.invoke(enrich_prompt.format(question=question)).content or ""
+                txt = raw_text.strip()
+                if txt.startswith("```"):
+                    lines = txt.splitlines()
+                    if lines and lines[0].startswith("```"):
+                        lines = lines[1:]
+                    if lines and lines[-1].strip().startswith("```"):
+                        lines = lines[:-1]
+                    txt = "\n".join(lines).strip()
+                try:
+                    data = _json.loads(txt)
+                except Exception:
+                    m = re.search(r"\{[\s\S]*\}", txt)
+                    data = _json.loads(m.group(0)) if m else {}
+            else:
+                data = {}
+            if not isinstance(data, dict):
+                data = {}
+            expanded = data.get("expanded_query") if isinstance(data.get("expanded_query"), str) else question
+            keywords = data.get("keywords") if isinstance(data.get("keywords"), list) else []
+            entities = data.get("entities") if isinstance(data.get("entities"), list) else []
+            filters = data.get("filters") if isinstance(data.get("filters"), dict) else {
+                "materia": "", "status": "", "date": "", "expediente": "", "carpeta": "", "seccion": ""
+            }
+            parts = [expanded or question]
+            if keywords:
+                parts.append(" ".join([str(k_) for k_ in keywords if k_]))
+            if entities:
+                parts.append(" ".join([str(e_) for e_ in entities if e_]))
+            final_q = " ".join([p for p in parts if p]).strip()
+            md_filter = build_metadata_filter(filters)
+            chroma_where = build_chroma_where(md_filter)
+            enriched_data = {
+                "expanded_query": expanded,
+                "keywords": keywords,
+                "entities": entities,
+                "filters": filters,
+                "_raw": "(ok)" if enrich_enabled else "(sin enriquecimiento: fallback)",
+            }
+        except Exception:
+            final_q = question
+            md_filter = {}
+            chroma_where = None
+            enriched_data = {
+                "expanded_query": question,
+                "keywords": [],
+                "entities": [],
+                "filters": {"materia": "", "status": "", "date": "", "expediente": "", "carpeta": "", "seccion": ""},
+                "_raw": "(sin enriquecimiento: error/fallback)",
+            }
+
+        # --- Retrieval ---
+        fetch_more = max(k * 5, 20)
+        if use_mmr:
+            try:
+                pairs = vdb.mmr_search_with_score(
+                    final_q, k=fetch_more, fetch_k=max(fetch_more * 2, 40), metadata_filter=chroma_where or None
+                )
+            except AttributeError:
+                _docs = vdb.mmr_search(
+                    final_q, k=fetch_more, fetch_k=max(fetch_more * 2, 40), metadata_filter=chroma_where or None
+                )
+                pairs = [(d, None) for d in _docs]
+        else:
+            try:
+                pairs = vdb.similarity_search_with_score(final_q, k=fetch_more, metadata_filter=chroma_where or None)
+            except AttributeError:
+                _docs = vdb.similarity_search(final_q, k=fetch_more, metadata_filter=chroma_where or None)
+                pairs = [(d, None) for d in _docs]
+
+        # --- Filtro local por fecha ---
+        date_pred = build_date_predicate(md_filter.get("date", ""))
+        filtered_pairs = [(d, s) for (d, s) in pairs if date_pred((d.metadata or {}).get("date", ""))]
+
+        # --- Selección final ---
+        docs_with_scores = (filtered_pairs[:k] if filtered_pairs else pairs[:k])
+        docs = [d for (d, _) in docs_with_scores]
+        ctx = format_docs_for_prompt(docs)
+
+        # --- Generación ---
+        msg = gen_prompt.format(question=question, context=ctx)
+        resp = llm.invoke(msg)
+        answer = (resp.content or "").strip()
+
+        return {
+            "answer": answer,
+            "docs_with_scores": docs_with_scores,
+            "final_query": final_q,
+            "filter": md_filter,
+            "where": chroma_where,
+            "enriched": enriched_data,
+        }
+
+
 
 
     if user_question:

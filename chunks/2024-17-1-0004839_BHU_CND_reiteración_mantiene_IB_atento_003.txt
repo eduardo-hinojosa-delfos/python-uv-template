@@ -10,7 +10,7 @@ Expediente: 2024-17-1-0004839
 Entrada: 4867/2024
 Fecha entrada: N/A
 Materia: Sin información
-Status: Mantiene
+Status: Observa
 
 === CONTENIDO ===
 ATENTO: a lo expresado precedentemente y a lo dispuesto por el artículo 211, literal B) de la Constitución de la República;

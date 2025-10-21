@@ -10,7 +10,7 @@ Expediente: 2024-17-1-0001154.
 Entrada: 1111/2024
 Fecha entrada: 2024-03-20
 Materia: Sin información
-Status: Mantiene
+Status: Levanta
 
 === CONTENIDO ===
 
